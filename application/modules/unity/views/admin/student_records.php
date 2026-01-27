@@ -3,19 +3,20 @@
         <h1> Records <small>
                 <a class="btn btn-app" :href="base_url + 'unity/student_viewer/' + student.intID"><i
                         class="ion ion-arrow-left-a"></i>All Details</a>
-                <a class="btn btn-app" href="#" data-toggle="modal"
-                    data-target="#printTranscript"><i class="fa fa-print"></i>Print TOR/TCG</a>
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#printTranscript"><i
+                        class="fa fa-print"></i>Print TOR/TCG</a>
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#creditSubjects"><i
                         class="fa fa-plus"></i>Add Credits</a>
-                <a class="btn btn-app" href="#" data-toggle="modal"
-                    data-target="#unitEarnedModal"><i class="fa fa-print"></i>Certificate of Unit
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#unitEarnedModal"><i
+                        class="fa fa-print"></i>Certificate of Unit
                     Earned</a>
-                <a class="btn btn-app" href="#" data-toggle="modal"
-                    data-target="#certificateOfEnrollmentModal"><i
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#certificateOfEnrollmentModal"><i
                         class="fa fa-print"></i>Certificate of Enrollment</a>
-                <a class="btn btn-app" href="#" data-toggle="modal"
-                    data-target="#certificateOfGWAModal"><i class="fa fa-print"></i>Certificate of
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#certificateOfGWAModal"><i
+                        class="fa fa-print"></i>Certificate of
                     GWA</a>
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#printRecords"><i
+                        class="fa fa-print"></i>Print Permanent Record</a>
             </small>
         </h1>
         <hr />
@@ -95,8 +96,7 @@
                                         </thead>
                                         <tbody>
                                             <template v-for="item in getRecordsWithCombined(term)">
-                                                <tr v-if="item.type == 'combined'"
-                                                    style="font-size: 13px;">
+                                                <tr v-if="item.type == 'combined'" style="font-size: 13px;">
                                                     <td></td>
                                                     <td v-if="!item.data.elective_subject">
                                                         {{ item.data.combineCode }}
@@ -150,8 +150,7 @@
                                                     </td>
                                                     <td v-else style="font-weight:bold"> OW </td>
                                                     <!-- <td v-if="student.type == 'shs' && item.data.v2 && item.data.v3">{{ (parseInt(item.data.v2) + parseInt(item.data.v3) ? Math.round((parseInt(item.data.v2) + parseInt(item.data.v3)) / 2) : 'T')}}</td> -->
-                                                    <td
-                                                        v-if="student.type == 'shs' && item.data.semFinalGrade">
+                                                    <td v-if="student.type == 'shs' && item.data.semFinalGrade">
                                                         {{ item.data.semFinalGrade }}
                                                     </td>
                                                     <td v-else-if="student.type == 'shs'">---</td>
@@ -220,20 +219,16 @@
                             <div class="box box-success">
                                 <div class="box-body">
                                     <div style="font-size:.8em">
-                                        <span
-                                            style="color:rgb(0, 144, 0);font-size:1.4em;">&#9632;</span>
-                                        Passed &nbsp; <span
-                                            style="color:rgb(144, 0, 0);font-size:1.4em;">&#9632;</span>
-                                        Failed &nbsp; <span
-                                            style="color:rgb(0, 0, 144);font-size:1.4em;">&#9632;</span>
+                                        <span style="color:rgb(0, 144, 0);font-size:1.4em;">&#9632;</span>
+                                        Passed &nbsp; <span style="color:rgb(144, 0, 0);font-size:1.4em;">&#9632;</span>
+                                        Failed &nbsp; <span style="color:rgb(0, 0, 144);font-size:1.4em;">&#9632;</span>
                                         Currently Enrolled &nbsp; <span
                                             style="color:rgb(0, 0, 0);font-size:1.4em;">&#9632;</span>
                                         Not Yet Taken &nbsp;
                                     </div>
                                     <hr />
                                     <div v-for="record in curriculum_subjects">
-                                        <table v-for="term in record"
-                                            class="table table-condensed table-bordered">
+                                        <table v-for="term in record" class="table table-condensed table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th colspan="5">
@@ -249,10 +244,8 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <template
-                                                    v-for="item in getCurriculumRecords(term)">
-                                                    <tr v-if="item.type == 'combined'"
-                                                        style="font-size: 13px;">
+                                                <template v-for="item in getCurriculumRecords(term)">
+                                                    <tr v-if="item.type == 'combined'" style="font-size: 13px;">
                                                         <td>{{ item.data.combineCode }}</td>
                                                         <td>{{ item.data.combineDesc }}</td>
                                                         <td>{{ getAverageGradeCurriculum(term, item.data.intSubjectID) }}
@@ -284,8 +277,7 @@
                                                         <td v-if="item.data.equivalent">
                                                             ({{ parseInt(item.data.equivalent.units).toFixed(1) }})
                                                         </td>
-                                                        <td
-                                                            v-else-if="item.data.rec && item.data.rec.include_gwa == 1">
+                                                        <td v-else-if="item.data.rec && item.data.rec.include_gwa == 1">
                                                             {{ (item.data.rec && item.data.rec.strRemarks == 'Passed')?item.data.rec.strUnits:'---' }}
                                                         </td>
                                                         <td v-else>
@@ -349,8 +341,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="record in term.records"
-                                                style="font-size: 13px;">
+                                            <tr v-for="record in term.records" style="font-size: 13px;">
                                                 <td>{{ record.course_code  }}</td>
                                                 <td>{{ record.descriptive_title }}</td>
                                                 <td>({{ parseInt(record.units).toFixed(1) }})</td>
@@ -360,8 +351,7 @@
                                                 <td>{{ record.strCode }}</td>
                                                 <td>
                                                     <button class="btn btn-default" href="#"
-                                                        @click="prepareCredited(record)"
-                                                        data-toggle="modal"
+                                                        @click="prepareCredited(record)" data-toggle="modal"
                                                         data-target="#editCreditSubjects">Edit</a>&nbsp;
                                                         <button class="btn btn-danger"
                                                             @click="deleteCredited(record.id)">Delete</button>
@@ -393,8 +383,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="item in generated_tor"
-                                                style="font-size: 13px;">
+                                            <tr v-for="item in generated_tor" style="font-size: 13px;">
                                                 <td>{{ item.generated_by  }}</td>
                                                 <td>{{ item.date_generated  }}</td>
                                                 <td>{{ item.prepared_by  }}</td>
@@ -405,8 +394,7 @@
                                                 <td>{{ item.included_terms  }}</td>
                                                 <td>{{ item.type  }}</td>
                                                 <td><a :href="base_url +'pdf/reprint_tor/' + item.id +'?picture=' + tor.picture + '&admission_date=' + tor.admission_date"
-                                                        target="_blank"
-                                                        class="btn btn-success">Re-print</a></td>
+                                                        target="_blank" class="btn btn-success">Re-print</a></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -430,8 +418,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="record in change_grades"
-                                                style="font-size: 13px;">
+                                            <tr v-for="record in change_grades" style="font-size: 13px;">
                                                 <td>{{ record.enumSem }}</td>
                                                 <td>{{ record.strYearStart + '-' + record.strYearEnd }}
                                                 </td>
@@ -449,8 +436,7 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="tab_6">
-                            <div v-for="term in unregistered"
-                                :class="term.reg.color + ' box box-solid'">
+                            <div v-for="term in unregistered" :class="term.reg.color + ' box box-solid'">
                                 <div class="box-header">
                                     <div class="row">
                                         <div class="col-sm-3">School Year: <span
@@ -485,8 +471,7 @@
                                         </thead>
                                         <tbody>
                                             <template v-for="item in getRecordsWithCombined(term)">
-                                                <tr v-if="item.type == 'combined'"
-                                                    style="font-size: 13px;">
+                                                <tr v-if="item.type == 'combined'" style="font-size: 13px;">
                                                     <td></td>
                                                     <td v-if="!item.data.elective_subject">
                                                         {{ item.data.combineCode }}
@@ -540,8 +525,7 @@
                                                     </td>
                                                     <td v-else style="font-weight:bold"> OW </td>
                                                     <!-- <td v-if="student.type == 'shs' && item.data.v2 && item.data.v3">{{ (parseInt(item.data.v2) + parseInt(item.data.v3) ? Math.round((parseInt(item.data.v2) + parseInt(item.data.v3)) / 2) : 'T')}}</td> -->
-                                                    <td
-                                                        v-if="student.type == 'shs' && item.data.semFinalGrade">
+                                                    <td v-if="student.type == 'shs' && item.data.semFinalGrade">
                                                         {{ item.data.semFinalGrade }}
                                                     </td>
                                                     <td v-else-if="student.type == 'shs'">---</td>
@@ -624,27 +608,25 @@
                         <div class="row">
                             <input type="hidden" name="student_id" v-model="tor.student_id" />
                             <input type="hidden" name="picture" v-model="tor.picture" />
-                            <input type="hidden" name="admission_date"
-                                v-model="tor.admission_date" />
+                            <input type="hidden" name="admission_date" v-model="tor.admission_date" />
                             <div class="form-group col-sm-6">
                                 <label>Date Issued</label>
-                                <input required name="date_issued" v-model="tor.date_issued"
-                                    type="datetime-local" class="form-control">
+                                <input required name="date_issued" v-model="tor.date_issued" type="datetime-local"
+                                    class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Remarks</label>
-                                <textarea required name="remarks" v-model="tor.remarks"
-                                    class="form-control"></textarea>
+                                <textarea required name="remarks" v-model="tor.remarks" class="form-control"></textarea>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Prepared By</label>
-                                <input required name="prepared_by" v-model="tor.prepared_by"
-                                    type="text" class="form-control">
+                                <input required name="prepared_by" v-model="tor.prepared_by" type="text"
+                                    class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Verified By</label>
-                                <input required name="verified_by" v-model="tor.verified_by"
-                                    type="text" class="form-control">
+                                <input required name="verified_by" v-model="tor.verified_by" type="text"
+                                    class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Registrar/Signatory</label>
@@ -653,21 +635,20 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Signatory (Leave blank for Registrar)</label>
-                                <input name="signatory_label" v-model="tor.signatory_label"
-                                    type="text" class="form-control">
+                                <input name="signatory_label" v-model="tor.signatory_label" type="text"
+                                    class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Type</label>
-                                <select name="type" required v-model="tor.type"
-                                    class="form-control">
+                                <select name="type" required v-model="tor.type" class="form-control">
                                     <option value="tor">Transcript</option>
                                     <option value="copy of grades">Copy of Grades</option>
                                 </select>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Included Terms</label>
-                                <select name="included_terms[]" required multiple
-                                    v-model="tor.included_terms" class="form-control">
+                                <select name="included_terms[]" required multiple v-model="tor.included_terms"
+                                    class="form-control">
                                     <option v-for="term in records" :value="term.reg.term_id">
                                         {{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}
                                     </option>
@@ -678,15 +659,13 @@
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Generate</button>
-                        <button type="button" class="btn btn-default"
-                            data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
         </div>
         <div class="modal fade" id="creditSubjects" role="dialog">
-            <form ref="credit_subjects" @submit.prevent="creditSubject" method="post"
-                class="modal-dialog modal-lg">
+            <form ref="credit_subjects" @submit.prevent="creditSubject" method="post" class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -698,8 +677,7 @@
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label>Course Code *</label>
-                                <input required v-model="add_credits.course_code" type="text"
-                                    class="form-control">
+                                <input required v-model="add_credits.course_code" type="text" class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Descriptive Title *</label>
@@ -713,28 +691,25 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Grade *</label>
-                                <input required v-model="add_credits.grade" type="text" max="25"
-                                    class="form-control">
+                                <input required v-model="add_credits.grade" type="text" max="25" class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>School *</label>
-                                <input v-model="add_credits.completion" type="text" max="50"
-                                    class="form-control">
+                                <input v-model="add_credits.completion" type="text" max="50" class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Term</label>
-                                <input placeholder="Ex. First Trimester" v-model="add_credits.term"
-                                    type="text" max="50" class="form-control">
+                                <input placeholder="Ex. First Trimester" v-model="add_credits.term" type="text" max="50"
+                                    class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>School Year</label>
-                                <input placeholder="Ex. 2023-2024" v-model="add_credits.school_year"
-                                    type="text" max="50" class="form-control">
+                                <input placeholder="Ex. 2023-2024" v-model="add_credits.school_year" type="text"
+                                    max="50" class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Equivalent Subject</label>
-                                <select v-model="add_credits.equivalent_subject"
-                                    class="form-control">
+                                <select v-model="add_credits.equivalent_subject" class="form-control">
                                     <option v-for="item in subjects" :value="item.intSubjectID">
                                         {{ item.strCode + " "  + item.strDescription }}
                                     </option>
@@ -745,8 +720,65 @@
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default"
-                            data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal fade" id="printRecords" role="dialog">
+            <form target="_blank" ref="generate_records" @submit.prevent="printRecords" method="post"
+                :action="base_url + 'pdf/shs_permanent_record'" class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- modal header  -->
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Generate Permanent Record</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <input type="hidden" name="student_id" v-model="record.student_id" />
+                            <input type="hidden" name="admission_date" v-model="record.admission_date" />
+                            <div class="form-group col-sm-8">
+                                <label>Graduation Date</label>
+                                <input required name="graduation_date" v-model="record.graduation_date" type="date"
+                                    class="form-control">
+                            </div>
+                            <div class="form-group col-sm-8">
+                                <label>Date Issued</label>
+                                <input required name="date_issued" v-model="record.date_issued" type="date"
+                                    class="form-control">
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label>Remarks</label>
+                                <input name="remarks" v-model="record.remarks" class="form-control"></input>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label>Admission to</label>
+                                <input required name="admission_to" v-model="record.admission_to"
+                                    class="form-control"></input>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label>Registrar</label>
+                                <input required name="registrar" v-model="record.registrar"
+                                    class="form-control"></input>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label>Prepared By</label>
+                                <input required name="prepared_by" v-model="record.prepared_by" type="text"
+                                    class="form-control">
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label>Verified By</label>
+                                <input required name="verified_by" v-model="record.verified_by" type="text"
+                                    class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <!-- modal footer  -->
+                        <button type="submit" class="btn btn-primary">Generate</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
@@ -765,8 +797,7 @@
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label>Course Code *</label>
-                                <input required v-model="edit_credits.course_code" type="text"
-                                    class="form-control">
+                                <input required v-model="edit_credits.course_code" type="text" class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Descriptive Title *</label>
@@ -775,34 +806,30 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Units *</label>
-                                <input required v-model="edit_credits.units" type="number"
-                                    step="0.5" class="form-control">
+                                <input required v-model="edit_credits.units" type="number" step="0.5"
+                                    class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Grade *</label>
-                                <input required v-model="edit_credits.grade" type="text" max="25"
-                                    class="form-control">
+                                <input required v-model="edit_credits.grade" type="text" max="25" class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>School *</label>
-                                <input v-model="edit_credits.completion" type="text" max="50"
-                                    class="form-control">
+                                <input v-model="edit_credits.completion" type="text" max="50" class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Term</label>
-                                <input placeholder="Ex. First Trimester" v-model="edit_credits.term"
-                                    type="text" max="50" class="form-control">
+                                <input placeholder="Ex. First Trimester" v-model="edit_credits.term" type="text"
+                                    max="50" class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>School Year</label>
-                                <input placeholder="Ex. 2023-2024"
-                                    v-model="edit_credits.school_year" type="text" max="50"
-                                    class="form-control">
+                                <input placeholder="Ex. 2023-2024" v-model="edit_credits.school_year" type="text"
+                                    max="50" class="form-control">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Equivalent Subject</label>
-                                <select v-model="edit_credits.equivalent_subject"
-                                    class="form-control">
+                                <select v-model="edit_credits.equivalent_subject" class="form-control">
                                     <option v-for="item in subjects" :value="item.intSubjectID">
                                         {{ item.strCode + " "  + item.strDescription }}
                                     </option>
@@ -812,16 +839,14 @@
                         <div class=" modal-footer">
                             <!-- modal footer  -->
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <button type="button" class="btn btn-default"
-                                data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
             </form>
         </div>
         <div class="modal fade" id="unitEarnedModal" role="dialog">
-            <form ref="print_unit_earned" @submit.prevent="printCertficateUnitEarned" method="post"
-                target="_blank" :action="base_url + 'pdf/certificate_of_unit_earned/' + this.id"
-                class="modal-dialog modal-lg">
+            <form ref="print_unit_earned" @submit.prevent="printCertficateUnitEarned" method="post" target="_blank"
+                :action="base_url + 'pdf/certificate_of_unit_earned/' + this.id" class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -833,8 +858,7 @@
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label>Select Term</label>
-                                <select name="term" required v-model="tor.included_terms"
-                                    class="form-control">
+                                <select name="term" required v-model="tor.included_terms" class="form-control">
                                     <option value='All' selected>All Terms</option>
                                     <option v-for="term in records" :value="term.reg.term_id">
                                         {{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}
@@ -858,16 +882,14 @@
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default"
-                            data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
         </div>
         <div class="modal fade" id="certificateOfEnrollmentModal" role="dialog">
-            <form ref="print_certificate_enrollment" @submit.prevent="printCertficateOfEnrollment"
-                method="post" target="_blank"
-                :action="base_url + 'pdf/certificate_of_enrollment/' + this.id"
+            <form ref="print_certificate_enrollment" @submit.prevent="printCertficateOfEnrollment" method="post"
+                target="_blank" :action="base_url + 'pdf/certificate_of_enrollment/' + this.id"
                 class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
@@ -880,8 +902,7 @@
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label>Select Term</label>
-                                <select name="term" required v-model="tor.included_terms"
-                                    class="form-control">
+                                <select name="term" required v-model="tor.included_terms" class="form-control">
                                     <option v-for="term in records" :value="term.reg.term_id">
                                         {{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}
                                     </option>
@@ -904,16 +925,14 @@
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default"
-                            data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
         </div>
         <div class="modal fade" id="certificateOfGWAModal" role="dialog">
-            <form ref="print_certificate_gwa" @submit.prevent="printCertficateOfGWA" method="post"
-                target="_blank" :action="base_url + 'pdf/certificate_of_gwa/' + this.id"
-                class="modal-dialog modal-lg">
+            <form ref="print_certificate_gwa" @submit.prevent="printCertficateOfGWA" method="post" target="_blank"
+                :action="base_url + 'pdf/certificate_of_gwa/' + this.id" class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -925,8 +944,7 @@
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label>Select Term</label>
-                                <select name="term" required v-model="tor.included_terms"
-                                    class="form-control">
+                                <select name="term" required v-model="tor.included_terms" class="form-control">
                                     <option v-for="term in records" :value="term.reg.term_id">
                                         {{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}
                                     </option>
@@ -949,8 +967,7 @@
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default"
-                            data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
@@ -1038,7 +1055,19 @@ new Vue({
             term: undefined,
             school_year: undefined,
             equivalent_subject: undefined,
-        }
+        },
+        record: {
+            date_issued: undefined,
+            remarks: undefined,
+            prepared_by: undefined,
+            verified_by: undefined,
+            registrar: undefined,
+            student_id: '<?php echo $id; ?>',
+            admission_date: undefined,
+            admission_to: undefined,
+            signatory_label: undefined,
+            graduation_date: undefined,
+        },
     },
     mounted() {
         let url_string = window.location.href;
@@ -1424,7 +1453,7 @@ new Vue({
                                 '">View Deficiencies</a>',
                             preConfirm: (login) => {
                                 this.$refs.generate_tor
-                            .submit();
+                                    .submit();
                             }
                         })
                     } else this.$refs.generate_tor.submit();
@@ -1568,6 +1597,24 @@ new Vue({
         },
         printCertficateOfGWA: function() {
             this.$refs.print_certificate_gwa.submit();
+        },
+        printRecords: function() {
+            Swal.fire({
+                title: 'Generate Records?',
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    // console.log(this.$refs.generate_records);
+
+                    this.$refs.generate_records.submit();
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
         },
     }
 })

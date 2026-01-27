@@ -5032,8 +5032,10 @@ class Pdf extends CI_Controller {
     
                 $data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
             }
+
+             $this->load->view("print_permanent_record",$data);
         }
-        echo json_encode($data);
+        // echo json_encode($data);
     }
 
     // public function all_balances_summary($id,$sem){
