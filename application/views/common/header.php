@@ -217,6 +217,70 @@
     .main-header {
         display: none !important;
     }
+    
+    /* Sidebar Customization */
+    .main-sidebar {
+        background: #fff !important;
+        border-right: 1px solid #ddd;
+    }
+    .sidebar {
+        background: #fff !important;
+    }
+    .sidebar-menu {
+        background: #fff !important;
+    }
+    .sidebar-menu > li {
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .sidebar-menu > li > a {
+        color: #333 !important;
+        border-left: 3px solid transparent;
+        transition: all 0.3s;
+    }
+    .sidebar-menu > li > a:hover {
+        background: #f5f5f5 !important;
+        border-left-color: #2559a8;
+    }
+    .sidebar-menu > li.active > a {
+        background: #e8f0f8 !important;
+        color: #2559a8 !important;
+        border-left-color: #2559a8;
+    }
+    .sidebar-menu > li.header {
+        background: #f8f8f8 !important;
+        color: #666 !important;
+        border-bottom: 1px solid #e0e0e0;
+        font-weight: 600;
+    }
+    .sidebar-menu .treeview-menu {
+        background: #fafafa !important;
+    }
+    .sidebar-menu .treeview-menu > li {
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .sidebar-menu .treeview-menu > li > a {
+        color: #555 !important;
+    }
+    .sidebar-menu .treeview-menu > li > a:hover {
+        background: #f0f0f0 !important;
+        color: #2559a8 !important;
+    }
+    .sidebar-menu .treeview-menu > li.active > a {
+        background: #e8f0f8 !important;
+        color: #2559a8 !important;
+    }
+    .sidebar-menu .treeview > a .fa-angle-left {
+        color: #999 !important;
+    }
+    .user-panel {
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .user-panel .info {
+        color: #333 !important;
+    }
+    .user-panel .info small {
+        color: #666 !important;
+    }
     </style>
 </head>
 
