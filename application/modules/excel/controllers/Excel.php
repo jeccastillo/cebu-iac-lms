@@ -7679,7 +7679,7 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    public function shs_gwa_rank($sem = 0, $year_level = 0, $program = 0)
+    public function shs_gwa_rank2($sem = 0, $year_level = 0, $program = 0)
     {
         $campus = $this->data['campus'];
         $gradeLevel = 'All Grade Level';
@@ -8381,15 +8381,11 @@ class Excel extends CI_Controller {
 
         if ( !$this->upload->do_upload("student_grade_excel"))
         {
-            print('1');
-            die();
             $error = array('error' => $this->upload->display_errors());
             return $error;
         }
         else
         {
-            print('2');
-            die();
             $fileData = $this->upload->data();
             $filePath = './assets/excel/' . $fileData['file_name'];
 
@@ -11525,6 +11521,222 @@ class Excel extends CI_Controller {
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
         header('Content-Disposition: attachment;filename="Added,Dropped,Changed Subjects Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+
+    // public function shs_list_of_honors($sem = 0, $year_level = 0)
+    public function shs_gwa_rank($sem = 0, $year_level = 0)
+    {
+        $campus = $this->data['campus'];
+        $gradeLevel = 'All Grade Level';
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramDescription, tb_mas_registration.intYearLevel')
+         ->from('tb_mas_users')
+         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+         ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+         ->where([
+             'tb_mas_registration.intAYID' => $sem,
+             'tb_mas_programs.type'        => 'shs'
+         ]);
+
+        // condition if specific program is selected
+        if ($program != 0) {
+            $this->db->where('tb_mas_users.intProgramID', $program);
+        }
+
+        // condition if specific grade level is selected
+        if ($year_level != 0) {
+            $gradeLevel = 'Grade_' . $year_level;
+            $this->db->where('tb_mas_registration.intYearLevel', $year_level);
+        }
+
+        $students = $this->db
+            ->order_by('tb_mas_users.strLastname', 'ASC')
+            ->get()
+            ->result_array();
+        
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        
+        $title = 'SHS GWA Rank';
+
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('B2', 'iACADEMY')
+            ->setCellValue('B3', $this->data['campus_address'])
+            ->setCellValue('B5', 'LIST of SHS Qualified Honors')
+            ->setCellValue('B6', $sy->enumSem . ' ' . $this->data["term_type"] . ', School Year ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+            ->setCellValue('B8', 'No.')
+            ->setCellValue('C8', 'Student No.')
+            ->setCellValue('D8', 'Last Name')
+            ->setCellValue('E8', 'First Name')
+            ->setCellValue('F8', 'Middle Name')
+            ->setCellValue('G8', 'Track/Strand')
+            ->setCellValue('H8', 'General Average')
+            ->setCellValue('H8', 'Honors')
+            ->setCellValue('I8', 'GL');
+
+        $i = 9;
+        $count = 1;
+        $gwa_ranks = array();
+
+        foreach($students as $student){
+            $totalGrades = $gwa = 0;
+            $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade, tb_mas_classlist_student.floatFinalGrade')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->where(array('tb_mas_classlist.intFinalized' => 2 ,'tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_classlist_student.floatFinalGrade !='=>null, 'tb_mas_classlist_student.floatMidtermGrade !='=>null, 'tb_mas_classlist_student.floatFinalsGrade !='=>null))
+            ->get()
+            ->result_array();
+
+            if(count($subjects) >  0){
+                $subjectCount = 0;
+                foreach($subjects as $subject){
+                    if(is_numeric($subject['floatMidtermGrade']) && is_numeric($subject['floatFinalGrade'])){
+                        $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalGrade']);
+                        $totalGrades += $average;
+                        $subjectCount++;
+                    }
+                }
+                
+                if($subjectCount > 0){
+                    $gwa = $totalGrades / $subjectCount;
+        
+                    if($gwa > 89){
+                        $student_data = array();
+                        $student_data['student_number'] = $student['strStudentNumber'];
+                        $student_data['last_name'] = strtoupper($student['strLastname']);
+                        $student_data['first_name'] = strtoupper($student['strFirstname']);
+                        $student_data['middle_name'] = strtoupper($student['strMiddlename']);
+                        $student_data['track'] = $student['strProgramDescription'];
+                        $student_data['gwa'] = $gwa;
+                        $student_data['year_level'] = $student['intYearLevel'];
+                        $gwa_ranks[] = $student_data;
+                    }
+                }
+            }
+        }
+        
+        //sort by GWA
+        usort($gwa_ranks, function($a, $b) {
+            return $a['gwa'] < $b['gwa'];
+        });
+
+        foreach($gwa_ranks as $index => $student){
+            $honor = '';
+            if($gwa >= 97)
+                $honor = 'First Honor';
+            else if($gwa >= 93)
+                $honor = 'Second Honor';
+            else if($gwa >= 89)
+                $honor = 'Third Honor';
+
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('B'.$i, $index)
+                ->setCellValue('C'.$i, str_replace("-", "", $student['student_number']))
+                ->setCellValue('D'.$i, $student['last_name'])
+                ->setCellValue('E'.$i, $student['first_name'])
+                ->setCellValue('F'.$i, $student['middle_name'])
+                ->setCellValue('G'.$i, $student['track'])
+                ->setCellValue('H'.$i, number_format(round($student['gwa'],2),2))
+                ->setCellValue('I'.$i, $honor)
+                ->setCellValue('I'.$i, $student['year_level']);
+
+            $count++;
+            $i++;
+        }
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('B2:I8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('B9:J'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+
+        $objPHPExcel->getActiveSheet()->getStyle('B2')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 14,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('B5')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 12,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('B8:I'. ($i-1))->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('B2:I2');
+        $sheet->mergeCells('B3:I3');
+        $sheet->mergeCells('B4:I4');
+        $sheet->mergeCells('B5:I5');
+        $sheet->mergeCells('B6:I6');
+
+        $objPHPExcel->getActiveSheet()->setTitle('SHS GWA RANK');
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="SHS List of GWA Rank - ' . $gradeLevel . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
