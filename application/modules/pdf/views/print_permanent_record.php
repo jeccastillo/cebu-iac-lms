@@ -585,6 +585,5 @@ foreach ($records  as $block):
     }
     Paged.registerHandlers(PageContinuationHandler)
     // window.PagedPolyfill.preview()
-    window.print();
     </script>
 </body>
