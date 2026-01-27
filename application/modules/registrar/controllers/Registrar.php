@@ -1416,7 +1416,7 @@ class Registrar extends CI_Controller {
         echo json_encode($students_array);
     }
 
-    public function shs_gwa_rank2($term = 0, $year = 0,  $program='')    
+    public function shs_gwa_rank($term = 0, $year = 0,  $program='')    
     {
         if($this->faculty_logged_in())
         {
@@ -1447,44 +1447,88 @@ class Registrar extends CI_Controller {
             $this->load->view("common/footer",$this->data); 
             $this->load->view("common/shs_gwa_rank_list_conf",$this->data);
         }
+    }
+
+    public function shs_gwa_rank_data2($sem = 0, $year_level = 0, $program = 0)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramDescription, tb_mas_registration.intYearLevel')
+         ->from('tb_mas_users')
+         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+         ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+         ->where([
+             'tb_mas_registration.intAYID' => $sem,
+             'tb_mas_programs.type'        => 'shs'
+         ]);
+
+        // condition if specific program is selected
+        if ($program != 0) {
+            $this->db->where('tb_mas_users.intProgramID', $program);
+        }
+
+        // condition if specific grade level is selected
+        if ($year_level != 0) {
+            $this->db->where('tb_mas_registration.intYearLevel', $year_level);
+        }
+
+        $students = $this->db
+            ->order_by('tb_mas_users.strLastname', 'ASC')
+            ->get()
+            ->result_array();
+
+        $gwa_ranks = array();
+        foreach($students as $student){
+            $totalGrades = $gwa = 0;
+            $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade, tb_mas_classlist_student.floatFinalGrade')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->where(array('tb_mas_classlist.intFinalized' => 2 ,'tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_classlist_student.floatFinalGrade !='=>null, 'tb_mas_classlist_student.floatMidtermGrade !='=>null, 'tb_mas_classlist_student.floatFinalsGrade !='=>null))
+            ->get()
+            ->result_array();
+
+            if(count($subjects) >  0){
+                $subjectCount = 0;
+                foreach($subjects as $subject){
+                    if(is_numeric($subject['floatMidtermGrade']) && is_numeric($subject['floatFinalGrade'])){
+                        $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalGrade']);
+                        $totalGrades += $average;
+                        $subjectCount++;
+                    }
+                }
+
+                if($subjectCount > 0){
+                    $gwa = $totalGrades / $subjectCount;
+        
+                    $student_data = array();
+                    $student_data['student_number'] = $student['strStudentNumber'];
+                    $student_data['last_name'] = strtoupper($student['strLastname']);
+                    $student_data['first_name'] = strtoupper($student['strFirstname']);
+                    $student_data['middle_name'] = strtoupper($student['strMiddlename']);
+                    $student_data['track'] = $student['strProgramDescription'];
+                    $student_data['gwa'] = $gwa;
+                    $student_data['year_level'] = $student['intYearLevel'];
+                    $gwa_ranks[] = $student_data;
+                }
+            }
+        }
+
+        //sort by GWA
+        usort($gwa_ranks, function($a, $b) {
+            return $a['gwa'] < $b['gwa'];
+        });
+
+        echo json_encode($gwa_ranks);
     }
     
-    // public function shs_list_of_honors_data($term = 0, $year = 0)   
-    public function shs_gwa_rank($term = 0, $year = 0,  $program='')     
-    {
-        if($this->faculty_logged_in())
-        {
-            if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
-            else
-                $term = $this->data_fetcher->get_sem_by_id($term); 
-            $programs_shs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'shs'));     
-
-            $this->data['shs'][] = [
-                'id' => 0,
-                'title' => 'All'
-            ];
-                    
-            foreach($programs_shs as $prog){
-                $temp['id'] = $prog['intProgramID'];
-                $temp['title'] = $prog['strProgramDescription'];
-                $this->data['shs'][] = $temp;
-            }
-         
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];
-            $this->data['postyear'] = $year;
-            $this->data['program'] = $program; 
-
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/shs_gwa_rank_list",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/shs_gwa_rank_list_conf",$this->data);
-        }
-    }
-
     public function shs_gwa_rank_data($sem = 0, $year_level = 0, $program = 0)
     {
+        
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
         {
@@ -1539,7 +1583,6 @@ class Registrar extends CI_Controller {
                 
                 if($subjectCount > 0){
                     $gwa = $totalGrades / $subjectCount;
-
                     $honor = '';
                     if($gwa >= 97)
                         $honor = 'First Honor';
