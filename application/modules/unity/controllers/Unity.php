@@ -1531,6 +1531,7 @@ class Unity extends CI_Controller {
         $credited_units = 0;
         $curriculum_units = 0;     
         $curriculum_units_na = 0;   
+        $grouped_combined_subjects = [];
 
         $change_grade = $this->db->select('tb_mas_student_grade_change.*,strClassName,year,strSection,sub_section,strCode,enumSem,term_label,term_student_type,strYearStart,strYearEnd')
             ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
@@ -1558,7 +1559,6 @@ class Unity extends CI_Controller {
                 ->get('tb_mas_curriculum_second')
                 ->result_array();
 
-            $grouped_combined_subjects = [];
             foreach ($combined_subjects as $row) {
                 // Use both 'combineCode' and 'combineDesc' to create a unique key for each group
                 $group_key = $row['combineCode'];
@@ -1794,9 +1794,16 @@ class Unity extends CI_Controller {
         $sy = $this->db->get('tb_mas_sy')->result_array();
         $semNotRegistered = $this->db->select('tb_mas_sy.*')
                 ->from('tb_mas_sy')
-                ->where_not_in('intID', $registeredSems)
                 ->get()
                 ->result_array();
+                
+        if($registeredSems){
+            $semNotRegistered = $this->db->select('tb_mas_sy.*')
+                    ->from('tb_mas_sy')
+                    ->where_not_in('intID', $registeredSems)
+                    ->get()
+                    ->result_array();
+        }
                 
         $notRegisteredTerms = [];
         //Not Registered Sem/Term

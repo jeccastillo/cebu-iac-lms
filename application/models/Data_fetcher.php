@@ -3348,7 +3348,7 @@ class Data_fetcher extends CI_Model {
                     if($scholar->tuition_fee_rate > 0){  
                         
                         // $tuition_scholarship_current = ($tuition - $in_house_grand_total - $tuition_discount_full) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_current = $tuition - $tuition_discount_installment * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_current = $tuition * ($scholar->tuition_fee_rate/100);
                         //discount after discount if external
                         if($scholar->deduction_from == 'external'){
                             $tuition_scholarship_current = ($tuition - $tuition_discount_full) * ($scholar->tuition_fee_rate/100);
@@ -3370,18 +3370,6 @@ class Data_fetcher extends CI_Model {
                         $total_assessment_rate_discount_installment30 += $tuition_scholarship_installment_current30;
                         $total_assessment_rate_discount_installment50 += $tuition_scholarship_installment_current50;
                         $tuition_fee_installment_rate = $tuition_scholarship_installment_current * ($scholar->tuition_fee_rate/100);
-
-
-                        // print($tuition + ($tuition * 0.09) . ' @ ');
-                        // print($tuition - $tuition_discount_installment . ' @ ');
-                        // print($tuition_scholarship_installment_current50 . ' @ ');
-                        // print($tuition_discount_installment50 . ' @ ');
-                        // die();
-                        // print($tuition_discount_full . ' @ ');
-                        // print($tuition_discount_installment . ' @ ');
-                        // print($tuition_discount_installment30 . ' @ ');
-                        // print($tuition_discount_installment50 . ' @ ');
-                        // 11922.6 @ 12995.634 @ 13710.99 @ 12995.634 @
 
                         //add total tuition percentage discount
                         $tuition_discount_full += ($tuition * ($scholar->tuition_fee_rate/100));

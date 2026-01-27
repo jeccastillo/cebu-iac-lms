@@ -477,7 +477,6 @@ new Vue({
 
         },     
         getPayments: function(tuition){
-            console.log(tuition)
             this.term_balance = 0;
             this.term_balance_other = 0;
             this.ledger_term = [];
@@ -617,6 +616,13 @@ new Vue({
                 if(tuition.term.paymentType == 'partial'){
                     discount_amount = tuition.scholarship_deductions_installment_dc_array[i] * -1;
                     dc = tuition.scholarship_deductions_installment_dc_array[i];
+                    if(tuition.tuition_year.installmentDP == '30'){
+                        discount_amount = tuition.scholarship_deductions_installment_dc_array30[i] * -1;
+                        dc = tuition.scholarship_deductions_installment_dc_array30[i];
+                    }else if(tuition.tuition_year.installmentDP == '50'){
+                        discount_amount = tuition.scholarship_deductions_installment_dc_array50[i] * -1;
+                        dc = tuition.scholarship_deductions_installment_dc_array50[i];
+                    }
                 }
                 else{
                     discount_amount = tuition.scholarship_deductions_dc_array[i] * -1;

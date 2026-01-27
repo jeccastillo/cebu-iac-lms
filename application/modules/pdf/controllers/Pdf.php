@@ -3654,17 +3654,19 @@ class Pdf extends CI_Controller {
                         $subjectCount++;
                     }
                 }
-                $gwa = $totalGrades / $subjectCount;
-    
-                $student_data = array();
-                $student_data['student_number'] = $student['strStudentNumber'];
-                $student_data['last_name'] = strtoupper($student['strLastname']);
-                $student_data['first_name'] = strtoupper($student['strFirstname']);
-                $student_data['middle_name'] = strtoupper($student['strMiddlename']);
-                $student_data['track'] = $student['strProgramDescription'];
-                $student_data['gwa'] = $gwa;
-                $student_data['year_level'] = $student['intYearLevel'];
-                $gwa_ranks[] = $student_data;
+                if($subjectCount > 0){
+                    $gwa = $totalGrades / $subjectCount;
+        
+                    $student_data = array();
+                    $student_data['student_number'] = $student['strStudentNumber'];
+                    $student_data['last_name'] = strtoupper($student['strLastname']);
+                    $student_data['first_name'] = strtoupper($student['strFirstname']);
+                    $student_data['middle_name'] = strtoupper($student['strMiddlename']);
+                    $student_data['track'] = $student['strProgramDescription'];
+                    $student_data['gwa'] = $gwa;
+                    $student_data['year_level'] = $student['intYearLevel'];
+                    $gwa_ranks[] = $student_data;
+                }
             }
         }
 
@@ -4947,6 +4949,7 @@ class Pdf extends CI_Controller {
                 'verified_by' => $post['verified_by'],
                 'registrar' => $post['registrar'],
                 'included_terms' => $included_terms,
+                'senior_high_school' => $post['senior_high_school'],
                 'admission_date' => isset($post['admission_date']) ? $post['admission_date'] : '',
                 'admission_to' => isset($post['admission_to']) ? $post['admission_to'] : '',
                 'graduation_date' => isset($post['graduation_date']) ? $post['graduation_date'] : '',
@@ -5030,11 +5033,281 @@ class Pdf extends CI_Controller {
     
                 $data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
             }
-                print_r($data);
-                die();
+
+             $this->load->view("print_permanent_record",$data);
         }
-        echo json_encode($data);
+        // echo json_encode($data);
     }
+
+    // public function all_balances_summary($id,$sem){
+                                
+    //     $data['student'] = $this->data_fetcher->getStudent($id);
+    //     $std_num = $data['student']['strStudentNumber'];
+    //     $data['student']['strStudentNumber'] = preg_replace("/[^a-zA-Z0-9]+/", "", $data['student']['strStudentNumber']);
+    //     $registrations =  $this->db->select('tb_mas_sy.*, paymentType, enumStudentType')
+    //                                 ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
+    //                                 ->where(array('intStudentID'=>$id))
+    //                                 ->order_by("strYearStart desc, enumSem desc")
+    //                                 ->get('tb_mas_registration')
+    //                                 ->result_array();
+    //     $tuition = [];
+        
+    //     $data['current_type'] = !empty($registrations) ? $registrations[0]['enumStudentType'] : null;
+
+    //     foreach($registrations as $reg){            
+    //         $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
+    //         $temp['term'] = $reg;     
+            
+    //         //TUITION PAYMENTS
+    //         $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND (status = 'Paid' || status = 'Void' ) ORDER BY or_date ASC";
+    //         $tuition_payments =  $this->db->query($sql)
+    //                                       ->result_array();                  
+
+    //         $temp['payments_tuition']  = [];                                  
+    //         foreach($tuition_payments as $tuition_payment){
+    //             $tuition_payment['or_date'] = $tuition_payment['or_date'] ? date('M j, Y',strtotime($tuition_payment['or_date'])) : date('M j, Y',strtotime($tuition_payment['created_at'])) ;
+    //             $temp['payments_tuition'][] = $tuition_payment;
+    //         }   
+            
+    //         //OTHER PAYMENTS
+    //         $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND (status = 'Paid' || status = 'Void') ORDER BY or_date ASC";
+    //         $other_payments =  $this->db->query($sql)
+    //                                       ->result_array();                  
+
+    //         $temp['payments_other']  = [];                                  
+    //         foreach($other_payments as $other_payment){
+    //             $other_payment['or_date'] = date('M j, Y',strtotime($other_payment['or_date']));
+    //             $temp['payments_other'][] = $other_payment;
+    //         } 
+
+                                                      
+
+    //         $ledger = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+    //         ->from('tb_mas_student_ledger')
+    //         ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+    //         ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+    //         ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')                    
+    //         ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $reg['intID']))        
+    //         ->order_by("strYearStart asc, enumSem asc, date asc")
+    //         ->get()
+    //         ->result_array();
+
+    //         //TUITION YEAR
+    //         $temp['tuition_year'] = $this->db->select('tb_mas_tuition_year.year,tb_mas_tuition_year.installmentDP')     
+    //                     ->from('tb_mas_registration')              
+    //                     ->join('tb_mas_tuition_year', 'tb_mas_registration.tuition_year = tb_mas_tuition_year.intID')
+    //                     ->where(array('tb_mas_registration.intStudentID'=>$id))
+    //                     ->get()
+    //                     ->first_row('array');
+
+    //         $temp['balance'] = $this->db->get_where('tb_mas_prev_balance',array('term'=>$reg['intID'],'student_number'=> $std_num))
+    //                             ->result_array();
+
+    //         $temp['ledger'] = [];
+
+    //         foreach($ledger as $item){
+    //             $item['date'] = date('M j, Y',strtotime($item['date']));
+    //             $temp['ledger'][] = $item;
+    //         }
+
+    //         $data['particulars'] = $this->db->get_where('tb_mas_particulars',array('type'=>'particular'))
+    //                                     ->result_array();
+
+    //         $other = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+    //         ->from('tb_mas_student_ledger')
+    //         ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+    //         ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+    //         ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other','syid' => $reg['intID']))        
+    //         ->get()
+    //         ->result_array();
+
+    //         $temp['other'] = [];
+
+    //         foreach($other as $item){
+    //             $item['date'] = date('M j, Y',strtotime($item['date']));
+    //             $temp['other'][] = $item;
+    //         }
+
+    //         $tuition[] =  $temp;
+            
+    //     }
+        
+    //     // Add previous-balance terms (not in registrations) and include ledger/other for those terms
+    //     $reg_term_ids = array();
+    //     foreach($registrations as $r){
+    //         $reg_term_ids[] = $r['intID'];
+    //     }
+    //     $prev_all = $this->db->get_where('tb_mas_prev_balance', array('student_number'=> $std_num))->result_array();
+    //     if($prev_all){
+    //         $by_term = array();
+    //         foreach($prev_all as $pb){
+    //             $by_term[$pb['term']][] = $pb;
+    //         }
+    //         foreach($by_term as $term_id => $balances){
+    //             if(!in_array($term_id, $reg_term_ids)){
+    //                 $sy = $this->db->get_where('tb_mas_sy', array('intID' => $term_id))->first_row('array');
+    //                 if($sy){
+    //                     $temp = array();
+    //                     $sy['paymentType'] = 'full';
+    //                     $temp['term'] = $sy;
+
+    //                     // payments left empty (Option A)
+    //                     $temp['payments_tuition'] = array();
+    //                     $temp['payments_other'] = array();
+
+    //                     // fetch tuition-type ledger for this term
+    //                     $ledger = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')
+    //                         ->from('tb_mas_student_ledger')
+    //                         ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+    //                         ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+    //                         ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+    //                         ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $term_id))
+    //                         ->order_by("strYearStart asc, enumSem asc, date asc")
+    //                         ->get()
+    //                         ->result_array();
+    //                     $temp['ledger'] = array();
+    //                     foreach($ledger as $item){
+    //                         $item['date'] = date('M j, Y',strtotime($item['date']));
+    //                         $temp['ledger'][] = $item;
+    //                     }
+
+    //                     // fetch other-type ledger for this term
+    //                     $other = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')
+    //                         ->from('tb_mas_student_ledger')
+    //                         ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+    //                         ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+    //                         ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other','syid' => $term_id))
+    //                         ->get()
+    //                         ->result_array();
+    //                     $temp['other'] = array();
+    //                     foreach($other as $item){
+    //                         $item['date'] = date('M j, Y',strtotime($item['date']));
+    //                         $temp['other'][] = $item;
+    //                     }
+
+    //                     // scholarship/discount empty arrays for consistency
+    //                     $temp['scholarship'] = array();
+    //                     $temp['discount'] = array();
+    //                     $temp['scholarship_deductions_installment_array'] = array();
+    //                     $temp['scholarship_deductions_array'] = array();
+    //                     $temp['scholarship_deductions_installment_dc_array'] = array();
+    //                     $temp['scholarship_deductions_dc_array'] = array();
+
+    //                     // tuition amounts zero by default
+    //                     $temp['ti_before_deductions'] = 0;
+    //                     $temp['total_before_deductions'] = 0;
+
+    //                     // attach prev balances for this term
+    //                     $temp['balance'] = $balances;
+
+    //                     $tuition[] = $temp;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     // Add payment-only terms (terms with payments but without registration records)
+    //     $existing_term_ids = array();
+    //     foreach($tuition as $t){
+    //         if(isset($t['term']['intID'])){
+    //             $existing_term_ids[] = $t['term']['intID'];
+    //         }
+    //     }
+    //     $paid_terms = $this->db->select('DISTINCT sy_reference', false)
+    //                            ->from('payment_details')
+    //                            ->where(array('student_number' => $data['student']['slug']))
+    //                            ->where_in('status', array('Paid','Void'))
+    //                            ->where("sy_reference IS NOT NULL", null, false)
+    //                            ->get()
+    //                            ->result_array();
+
+    //     if($paid_terms){
+    //         foreach($paid_terms as $pt){
+    //             $term_id = (int) $pt['sy_reference'];
+    //             if($term_id === 0) continue;
+    //             if(in_array($term_id, $existing_term_ids)) continue;
+
+    //             $sy = $this->db->get_where('tb_mas_sy', array('intID' => $term_id))->first_row('array');
+    //             if(!$sy) continue;
+
+    //             $temp = array();
+    //             $sy['paymentType'] = 'full';
+    //             $temp['term'] = $sy;
+
+    //             // TUITION PAYMENTS
+    //             $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$term_id." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND (status = 'Paid' || status = 'Void' ) ORDER BY or_date ASC";
+    //             $tuition_payments =  $this->db->query($sql)->result_array();                  
+    //             $temp['payments_tuition']  = [];                                  
+    //             foreach($tuition_payments as $tuition_payment){
+    //                 $tuition_payment['or_date'] = $tuition_payment['or_date'] ? date('M j, Y',strtotime($tuition_payment['or_date'])) : date('M j, Y',strtotime($tuition_payment['created_at'])) ;
+    //                 $temp['payments_tuition'][] = $tuition_payment;
+    //             }   
+
+    //             // OTHER PAYMENTS
+    //             $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$term_id." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND (status = 'Paid' || status = 'Void') ORDER BY or_date ASC";
+    //             $other_payments =  $this->db->query($sql)->result_array();                  
+    //             $temp['payments_other']  = [];                                  
+    //             foreach($other_payments as $other_payment){
+    //                 $other_payment['or_date'] = date('M j, Y',strtotime($other_payment['or_date']));
+    //                 $temp['payments_other'][] = $other_payment;
+    //             } 
+
+    //             // TUITION LEDGER
+    //             $ledger = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+    //                                 ->from('tb_mas_student_ledger')
+    //                                 ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+    //                                 ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+    //                                 ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')                    
+    //                                 ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $term_id))        
+    //                                 ->order_by("strYearStart asc, enumSem asc, date asc")
+    //                                 ->get()
+    //                                 ->result_array();
+                
+    //             $temp['ledger'] = [];
+    //             foreach($ledger as $item){
+    //                 $item['date'] = date('M j, Y',strtotime($item['date']));
+    //                 $temp['ledger'][] = $item;
+    //             }
+
+    //             // OTHER LEDGER
+    //             $other = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+    //                               ->from('tb_mas_student_ledger')
+    //                               ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+    //                               ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+    //                               ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other','syid' => $term_id))        
+    //                               ->get()
+    //                               ->result_array();
+                                  
+    //             $temp['other'] = [];
+    //             foreach($other as $item){
+    //                 $item['date'] = date('M j, Y',strtotime($item['date']));
+    //                 $temp['other'][] = $item;
+    //             }
+
+    //             // Scholarships/discounts placeholders
+    //             $temp['scholarship'] = array();
+    //             $temp['discount'] = array();
+    //             $temp['scholarship_deductions_installment_array'] = array();
+    //             $temp['scholarship_deductions_array'] = array();
+    //             $temp['scholarship_deductions_installment_dc_array'] = array();
+    //             $temp['scholarship_deductions_dc_array'] = array();
+
+    //             // tuition totals default
+    //             $temp['ti_before_deductions'] = 0;
+    //             $temp['total_before_deductions'] = 0;
+
+    //             // Attach previous balances if any
+    //             $temp['balance'] = $this->db->get_where('tb_mas_prev_balance',array('term'=>$term_id,'student_number'=> $std_num))->result_array();
+
+    //             $tuition[] = $temp;
+    //             $existing_term_ids[] = $term_id;
+    //         }
+    //     }
+
+    //     $data['tuition'] = $tuition;
+
+    //     echo json_encode($data);
+    // }
 
     private function stringifyNumber($n) {
         $special = ['0th','1st', '2nd', '3rd', '4th', '5th'];

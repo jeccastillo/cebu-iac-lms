@@ -424,6 +424,13 @@ class Finance extends CI_Controller {
             ->get()
             ->result_array();
 
+            //TUITION YEAR
+            $temp['tuition_year'] = $this->db->select('tb_mas_tuition_year.year,tb_mas_tuition_year.installmentDP')     
+                        ->from('tb_mas_registration')              
+                        ->join('tb_mas_tuition_year', 'tb_mas_registration.tuition_year = tb_mas_tuition_year.intID')
+                        ->where(array('tb_mas_registration.intStudentID'=>$id))
+                        ->get()
+                        ->first_row('array');
 
             $temp['balance'] = $this->db->get_where('tb_mas_prev_balance',array('term'=>$reg['intID'],'student_number'=> $std_num))
                                 ->result_array();
@@ -545,6 +552,7 @@ class Finance extends CI_Controller {
                                ->where("sy_reference IS NOT NULL", null, false)
                                ->get()
                                ->result_array();
+
         if($paid_terms){
             foreach($paid_terms as $pt){
                 $term_id = (int) $pt['sy_reference'];
