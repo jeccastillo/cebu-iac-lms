@@ -274,6 +274,10 @@
         margin: 0 !important;
         transition: none !important;
         animation: none !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        transform: none !important;
     }
     .sidebar-menu .treeview {
         position: relative !important;
