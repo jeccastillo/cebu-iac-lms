@@ -750,6 +750,10 @@
                                     class="form-control">
                             </div>
                             <div class="form-group col-sm-12">
+                                <label>Senior High School</label>
+                                <input name="senior_high_school" v-model="record.senior_high_school" class="form-control"></input>
+                            </div>
+                            <div class="form-group col-sm-12">
                                 <label>Remarks</label>
                                 <input name="remarks" v-model="record.remarks" class="form-control"></input>
                             </div>
@@ -1067,6 +1071,7 @@ new Vue({
             admission_to: undefined,
             signatory_label: undefined,
             graduation_date: undefined,
+            senior_high_school: undefined,
         },
     },
     mounted() {
