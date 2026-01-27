@@ -16,7 +16,7 @@
 .pagedjs_page_content::after {
     content: "Page "counter(page) " of "counter(pages);
     position: absolute;
-    bottom: -78mm;
+    bottom: -300px;
     left: 2px;
     font-size: 12px;
 }
@@ -98,9 +98,9 @@
 
 .footer-container {
     width: 100%;
-    font-size: 9pt;
+    font-size: 10pt;
     padding-top: 10px;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
 }
 
 .text-center {
@@ -172,11 +172,10 @@ tbody {
 
 .content-area {
     position: relative;
+    width: 100%;
+    margin-top: 10px
 }
 
-.content-area {
-    width: 100%;
-}
 
 .continued-next {
     position: absolute;
@@ -269,7 +268,7 @@ h3 {
     padding-left: 5px;
     /* min-height: 18px; */
     max-width: 200px;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 
 .code-col {
@@ -325,6 +324,10 @@ h3 {
 
 .md-name-line {
     min-width: 180px;
+}
+
+.name {
+    text-transform: capitalize;
 }
 
 @media print {
@@ -386,7 +389,8 @@ h3 {
                     </div>
                     <div class="field-row">
                         <span class="label">Date Issued:</span>
-                        <span class="underline"><?php echo $other_details['date_issued']?></span>
+                        <span
+                            class="underline"><?php echo date("F d, Y", strtotime($other_details['date_issued']))?></span>
                     </div>
                 </div>
                 <div class="right-section">
@@ -461,7 +465,7 @@ h3 {
                     <div class="info-group">
                         <span>Date of Admission :</span>
                         <span
-                            class="value"><?php echo date("F d, Y", strtotime($student['high_school_attended']))?></span>
+                            class="value"><?php echo date("F d, Y", strtotime($other_details['admission_date']))?></span>
                     </div>
                 </div>
                 <div class="grid-row">
@@ -471,7 +475,8 @@ h3 {
                     </div>
                     <div class="info-group">
                         <span>Date of Graduation :</span>
-                        <span class="value"><?php echo $other_details['graduation_date']?></span>
+                        <span
+                            class="value"><?php echo date("F d, Y", strtotime($other_details['graduation_date']))?></span>
                     </div>
                 </div>
             </div>

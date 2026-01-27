@@ -738,7 +738,6 @@
                     <div class="modal-body">
                         <div class="row">
                             <input type="hidden" name="student_id" v-model="record.student_id" />
-                            <input type="hidden" name="admission_date" v-model="record.admission_date" />
                             <div class="form-group col-sm-8">
                                 <label>Graduation Date</label>
                                 <input required name="graduation_date" v-model="record.graduation_date" type="date"
@@ -749,9 +748,15 @@
                                 <input required name="date_issued" v-model="record.date_issued" type="date"
                                     class="form-control">
                             </div>
+                            <div class="form-group col-sm-8">
+                                <label>Date of Admission</label>
+                                <input required name="admission_date" v-model="record.admission_date" type="date"
+                                    class="form-control">
+                            </div>
                             <div class="form-group col-sm-12">
                                 <label>Senior High School</label>
-                                <input name="senior_high_school" v-model="record.senior_high_school" class="form-control"></input>
+                                <input name="senior_high_school" v-model="record.senior_high_school"
+                                    class="form-control"></input>
                             </div>
                             <div class="form-group col-sm-12">
                                 <label>Remarks</label>
