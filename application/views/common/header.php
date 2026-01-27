@@ -572,7 +572,8 @@
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> Generate Exam
                                 Link</a>
                         </li>
-                    </ul>                
+                    </ul>
+                </li> <?php endif; ?>
                 <?php if($user['teaching'] == 1): ?> <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="faculty")?'active':''; ?>">
                     <a href="#">
