@@ -11708,7 +11708,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
