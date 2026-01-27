@@ -272,6 +272,8 @@
         z-index: 1050 !important;
         padding: 8px 0 !important;
         margin: 0 !important;
+        transition: none !important;
+        animation: none !important;
     }
     .sidebar-menu .treeview {
         position: relative !important;
