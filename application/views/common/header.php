@@ -147,7 +147,7 @@
         text-decoration: none;
         padding: 8px 12px;
         display: block;
-        font-size: 0.95rem;
+        font-size: 1rem;
         border-radius: 4px;
         transition: background 0.2s;
     }
@@ -266,10 +266,7 @@
                         </li>
                     </ul>
                 </li>
-            </ul>
-            <span class="custom-header-icon">
-                <img src="https://iacademy.edu.ph/assets/img/fav_new.png" alt="Profile">
-            </span>
+            </ul>            
         </div>
     </div>
     <!-- End Custom Top Header -->
@@ -362,21 +359,7 @@
     <!-- Left side column. contains the logo and sidebar -->
     <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-            <!-- Sidebar user panel -->
-            <div class="user-panel">
-                <div class="pull-left image">
-                    <img src="<?php echo ($user['strPicture']=="")?$img_dir."default_image.jpg":base_url().IMAGE_UPLOAD_DIR.$user['strPicture']; ?>"
-                        class="img-circle" alt="User Image">
-                </div>
-                <div class="pull-left info">
-                    <p> <?php echo $user['strFirstname']; ?></p>
-                    <i class="fa fa-users text-green"></i> <small>
-                        <?php echo switch_user_level($user['intUserLevel']); ?></small>
-                </div>
-            </div>
-            <!-- /.search form -->
-            <!-- sidebar menu: : style can be found in sidebar.less -->
+        <section class="sidebar">                                    
             <ul class="sidebar-menu">
                 <li class="header">Main Menu</li>
                 <li class="<?php echo (isset($page) && $page=="dashboard")?'active':''; ?>"><a
