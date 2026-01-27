@@ -1416,7 +1416,41 @@ class Registrar extends CI_Controller {
         echo json_encode($students_array);
     }
 
-    public function shs_gwa_rank($term = 0, $year = 0,  $program='')    
+    public function shs_gwa_rank2($term = 0, $year = 0,  $program='')    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+            $programs_shs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'shs'));     
+
+            $this->data['shs'][] = [
+                'id' => 0,
+                'title' => 'All'
+            ];
+                    
+            foreach($programs_shs as $prog){
+                $temp['id'] = $prog['intProgramID'];
+                $temp['title'] = $prog['strProgramDescription'];
+                $this->data['shs'][] = $temp;
+            }
+         
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            $this->data['postyear'] = $year;
+            $this->data['program'] = $program; 
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/shs_gwa_rank_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/shs_gwa_rank_list_conf",$this->data);
+        }
+    }
+    
+    // public function shs_list_of_honors_data($term = 0, $year = 0)   
+    public function shs_gwa_rank($term = 0, $year = 0,  $program='')     
     {
         if($this->faculty_logged_in())
         {
@@ -1492,6 +1526,7 @@ class Registrar extends CI_Controller {
             ->get()
             ->result_array();
 
+            
             if(count($subjects) >  0){
                 $subjectCount = 0;
                 foreach($subjects as $subject){
@@ -1501,19 +1536,30 @@ class Registrar extends CI_Controller {
                         $subjectCount++;
                     }
                 }
-
+                
                 if($subjectCount > 0){
                     $gwa = $totalGrades / $subjectCount;
+
+                    $honor = '';
+                    if($gwa >= 97)
+                        $honor = 'First Honor';
+                    else if($gwa >= 93)
+                        $honor = 'Second Honor';
+                    else if($gwa >= 89)
+                        $honor = 'Third Honor';
         
-                    $student_data = array();
-                    $student_data['student_number'] = $student['strStudentNumber'];
-                    $student_data['last_name'] = strtoupper($student['strLastname']);
-                    $student_data['first_name'] = strtoupper($student['strFirstname']);
-                    $student_data['middle_name'] = strtoupper($student['strMiddlename']);
-                    $student_data['track'] = $student['strProgramDescription'];
-                    $student_data['gwa'] = $gwa;
-                    $student_data['year_level'] = $student['intYearLevel'];
-                    $gwa_ranks[] = $student_data;
+                    if($gwa > 89){
+                        $student_data = array();
+                        $student_data['student_number'] = $student['strStudentNumber'];
+                        $student_data['last_name'] = strtoupper($student['strLastname']);
+                        $student_data['first_name'] = strtoupper($student['strFirstname']);
+                        $student_data['middle_name'] = strtoupper($student['strMiddlename']);
+                        $student_data['track'] = $student['strProgramDescription'];
+                        $student_data['gwa'] = $gwa;
+                        $student_data['honor'] = $honor;
+                        $student_data['year_level'] = $student['intYearLevel'];
+                        $gwa_ranks[] = $student_data;
+                    }
                 }
             }
         }
