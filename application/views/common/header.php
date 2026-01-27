@@ -87,9 +87,193 @@
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
     <audio id="ping" src="<?php echo base_url(); ?>assets/ping.mp3" preload="auto"></audio>
+    <style>
+    .custom-top-header {
+        width: 100%;
+        background: #2559a8;
+        min-height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 32px 0 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1040;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .custom-header-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .custom-header-logo {
+        height: 40px;
+        background: #fff;
+        border-radius: 4px;
+        padding: 4px;
+    }
+    .custom-header-text {
+        color: #fff;
+        font-size: 1.15rem;
+        font-weight: 400;
+        letter-spacing: 0.05em;
+    }
+    .custom-header-portal-text {
+        color: #fff;
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-left: 8px;
+    }
+    .custom-header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .custom-header-right .nav {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .custom-header-right .nav > li {
+        position: relative;
+    }
+    .custom-header-right .nav > li > a {
+        color: #fff;
+        text-decoration: none;
+        padding: 8px 12px;
+        display: block;
+        font-size: 0.95rem;
+        border-radius: 4px;
+        transition: background 0.2s;
+    }
+    .custom-header-right .nav > li > a:hover {
+        background: rgba(255,255,255,0.1);
+        text-decoration: none;
+    }
+    .custom-header-right .nav .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        min-width: 200px;
+        display: none;
+        z-index: 1050;
+        margin-top: 4px;
+    }
+    .custom-header-right .nav .dropdown.open .dropdown-menu {
+        display: block;
+    }
+    .custom-header-right .nav .dropdown-menu .user-header {
+        padding: 15px;
+        text-align: center;
+        background: #2559a8;
+        color: #fff;
+        border-radius: 4px 4px 0 0;
+    }
+    .custom-header-right .nav .dropdown-menu .user-header img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin-bottom: 8px;
+    }
+    .custom-header-right .nav .dropdown-menu .user-header p {
+        margin: 0;
+    }
+    .custom-header-right .nav .dropdown-menu .user-header a {
+        color: #fff;
+        text-decoration: none;
+    }
+    .custom-header-right .nav .dropdown-menu .user-footer {
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #eee;
+    }
+    .custom-header-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: #fff;
+        border-radius: 50%;
+        padding: 2px;
+    }
+    .custom-header-icon img {
+        height: 32px;
+        width: 32px;
+    }
+    body.sidebar-mini {
+        padding-top: 56px;
+    }
+    .main-header {
+        display: none !important;
+    }
+    </style>
 </head>
 
 <body class="sidebar-mini <?php echo $skin; ?>">
+    <!-- Custom Top Header -->
+    <div class="custom-top-header">
+        <div class="custom-header-left">
+            <img src="https://iacademy.edu.ph/assets/img/fav_new.png" alt="iACADEMY Logo" class="custom-header-logo">
+            <span class="custom-header-text">i A C A D E M Y</span>
+            <span class="custom-header-portal-text">SCHOOL MANAGEMENT SYSTEM</span>
+        </div>
+        <div class="custom-header-right">
+            <ul class="nav">
+                <li class="dropdown user user-menu">
+                    <a href="#">
+                        <span><?php echo $campus; ?></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://employeeportal.iacademy.edu.ph">
+                        <span>Employee Portal</span>
+                    </a>
+                </li>
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="glyphicon glyphicon-user"></i>
+                        <span><?php echo $user['strUsername']; ?> <i class="caret"></i></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="user-header">
+                            <img src="<?php echo ($user['strPicture']=="")?$img_dir."default_image.jpg":base_url().IMAGE_UPLOAD_DIR.$user['strPicture']; ?>"
+                                class="img-circle" alt="User Image">
+                            <p>
+                                <a style="color:#fff;"
+                                    href="<?php echo base_url(); ?>faculty/my_profile"><?php echo $user['strFirstname']." ".$user['strLastname']; ?></a>
+                                <small><?php if($user['intUserLevel'] == 1): ?>Site Admin<?php endif; ?></small>
+                            </p>
+                        </li>
+                        <li class="user-body"></li>
+                        <li class="user-footer">
+                            <div class="pull-left">
+                                <a href="<?php echo base_url(); ?>faculty/edit_profile" class="btn btn-default btn-flat">Edit Profile</a>
+                            </div>
+                            <div class="pull-right">
+                                <a href="<?php echo base_url(); ?>users/logout" class="btn btn-default btn-flat">Sign out</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <span class="custom-header-icon">
+                <img src="https://iacademy.edu.ph/assets/img/fav_new.png" alt="Profile">
+            </span>
+        </div>
+    </div>
+    <!-- End Custom Top Header -->
+    
     <header class="main-header">
         <!-- Logo -->
         <a href="<?php echo base_url().'unity/faculty_dashboard'; ?>" class="logo">
