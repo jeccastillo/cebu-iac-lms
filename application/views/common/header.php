@@ -252,14 +252,34 @@
         border-bottom: 1px solid #e0e0e0;
         font-weight: 600;
     }
+    
+    /* Treeview Popup/Flyout Style */
     .sidebar-menu .treeview-menu {
-        background: #fafafa !important;
+        display: none !important;
+        position: fixed !important;
+        left: 230px !important;
+        background: #fff !important;
+        border: 1px solid #ddd !important;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+        min-width: 200px;
+        z-index: 1050 !important;
+        padding: 8px 0 !important;
+        margin: 0 !important;
+    }
+    .sidebar-menu .treeview:hover > .treeview-menu,
+    .sidebar-menu .treeview.active > .treeview-menu {
+        display: block !important;
     }
     .sidebar-menu .treeview-menu > li {
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: none !important;
+        padding: 0 !important;
     }
     .sidebar-menu .treeview-menu > li > a {
         color: #555 !important;
+        padding: 10px 20px !important;
+        display: block !important;
+        transition: background 0.2s;
     }
     .sidebar-menu .treeview-menu > li > a:hover {
         background: #f0f0f0 !important;
@@ -269,9 +289,19 @@
         background: #e8f0f8 !important;
         color: #2559a8 !important;
     }
+    
+    /* Change angle-left to chevron-right for dropdowns */
     .sidebar-menu .treeview > a .fa-angle-left {
-        color: #999 !important;
+        display: none !important;
     }
+    .sidebar-menu .treeview > a::after {
+        content: "\f054";
+        font-family: FontAwesome;
+        float: right;
+        color: #999;
+        margin-top: 2px;
+    }
+    
     .user-panel {
         border-bottom: 1px solid #e0e0e0;
     }
@@ -424,8 +454,7 @@
     <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">                                    
-            <ul class="sidebar-menu">
-                <li class="header">Main Menu</li>
+            <ul class="sidebar-menu">                
                 <li class="<?php echo (isset($page) && $page=="dashboard")?'active':''; ?>"><a
                         href="<?php echo base_url() ?>unity/faculty_dashboard"><i
                             class="fa fa-home text-green"></i>
@@ -451,8 +480,7 @@
                             class="fa fa-book"> </i> View Applicants</a>
                 </li> <?php endif; ?>
                 <?php if(in_array($user['intUserLevel'],array(2,5,3,6,7)) ): ?>
-                <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->
-                <li class="header">Admissions</li>
+                <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->                
                 <?php if(in_array($user['intUserLevel'],array(2,5)) ): ?> <li
                     class="<?php echo (isset($page) && $page=="admissions_sy_setup")?'active':''; ?>">
                     <a href="<?php echo base_url() ?>admissionsV1/edit_ay/"><i
@@ -544,8 +572,7 @@
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> Generate Exam
                                 Link</a>
                         </li>
-                    </ul>
-                </li> <?php endif; ?> <li class="header">Menu</li>
+                    </ul>                
                 <?php if($user['teaching'] == 1): ?> <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="faculty")?'active':''; ?>">
                     <a href="#">
