@@ -8483,7 +8483,7 @@ class Excel extends CI_Controller {
                                     'strUnits' => 3,
                                     'strSection' => $row['F'],
                                     'intWithPayment' => 0,
-                                    'intCurriculumID' => $student['current_curriculum'],
+                                    'intCurriculumID' => $student['intCurriculumID'],
                                     'year' => $row['E'],
                                     'isDissolved' => 0,
                                     'conduct_grade' => 0
