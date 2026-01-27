@@ -8402,14 +8402,16 @@ class Excel extends CI_Controller {
                     $studentNumber = substr_replace($row['B'], '-', strlen($row['B']) - 5, 0);
                     $studentNumber = substr_replace($studentNumber, '-', strlen($studentNumber) - 3, 0);
                     
-                    print($studentNumber);
-                    die();
                     $student = $this->db
                     ->select("tb_mas_users.*")                                        
                     ->from("tb_mas_users")            
                     ->where(array("strStudentNumber"=>$studentNumber))
                     ->get()
                     ->first_row('array');
+
+                    print($studentNumber);
+                    print_r($student);
+                    die();
 
                     if($student){
                         $checkRegistration = $this->db                                    
