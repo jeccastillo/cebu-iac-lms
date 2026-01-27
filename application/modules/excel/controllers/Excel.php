@@ -11669,7 +11669,7 @@ class Excel extends CI_Controller {
         }
 
 
-        $objPHPExcel->getActiveSheet()->getStyle('B2:I8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('B2:J8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('B9:J'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 
         $objPHPExcel->getActiveSheet()->getStyle('B2')->applyFromArray(
@@ -11692,7 +11692,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('B8:I'. ($i-1))->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('B8:J'. ($i-1))->applyFromArray(
             array(
                 'borders' => array(
                     'allborders' => array(
@@ -11711,13 +11711,14 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
         
         $sheet = $objPHPExcel->getActiveSheet();
-        $sheet->mergeCells('B2:I2');
-        $sheet->mergeCells('B3:I3');
-        $sheet->mergeCells('B4:I4');
-        $sheet->mergeCells('B5:I5');
-        $sheet->mergeCells('B6:I6');
+        $sheet->mergeCells('B2:J2');
+        $sheet->mergeCells('B3:J3');
+        $sheet->mergeCells('B4:J4');
+        $sheet->mergeCells('B5:J5');
+        $sheet->mergeCells('B6:J6');
 
         $objPHPExcel->getActiveSheet()->setTitle('SHS LIST OF HONORS');
 
