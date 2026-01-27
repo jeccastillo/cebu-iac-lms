@@ -256,8 +256,9 @@
     /* Treeview Popup/Flyout Style */
     .sidebar-menu .treeview-menu {
         display: none !important;
-        position: fixed !important;
-        left: 230px !important;
+        position: absolute !important;
+        left: 100% !important;
+        top: 0 !important;
         background: #fff !important;
         border: 1px solid #ddd !important;
         border-radius: 4px;
@@ -265,10 +266,12 @@
         min-width: 200px;
         z-index: 1050 !important;
         padding: 8px 0 !important;
-        margin: 0 !important;
+        margin: 0 0 0 8px !important;
     }
-    .sidebar-menu .treeview:hover > .treeview-menu,
-    .sidebar-menu .treeview.active > .treeview-menu {
+    .sidebar-menu .treeview {
+        position: relative !important;
+    }
+    .sidebar-menu .treeview.menu-open > .treeview-menu {
         display: block !important;
     }
     .sidebar-menu .treeview-menu > li {
@@ -312,6 +315,42 @@
         color: #666 !important;
     }
     </style>
+    <script>
+    // Toggle dropdown on click
+    document.addEventListener('DOMContentLoaded', function() {
+        var treeviews = document.querySelectorAll('.sidebar-menu .treeview > a');
+        treeviews.forEach(function(item) {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                var parent = this.parentElement;
+                var isOpen = parent.classList.contains('menu-open');
+                
+                // Close all other open menus
+                document.querySelectorAll('.sidebar-menu .treeview.menu-open').forEach(function(openMenu) {
+                    if (openMenu !== parent) {
+                        openMenu.classList.remove('menu-open');
+                    }
+                });
+                
+                // Toggle current menu
+                if (isOpen) {
+                    parent.classList.remove('menu-open');
+                } else {
+                    parent.classList.add('menu-open');
+                }
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.treeview')) {
+                document.querySelectorAll('.sidebar-menu .treeview.menu-open').forEach(function(openMenu) {
+                    openMenu.classList.remove('menu-open');
+                });
+            }
+        });
+    });
+    </script>
 </head>
 
 <body class="sidebar-mini <?php echo $skin; ?>">
