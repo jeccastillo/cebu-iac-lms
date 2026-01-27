@@ -266,7 +266,7 @@
         min-width: 200px;
         z-index: 1050 !important;
         padding: 8px 0 !important;
-        margin: 0 0 0 8px !important;
+        margin: 0 !important;
     }
     .sidebar-menu .treeview {
         position: relative !important;
@@ -283,6 +283,7 @@
         padding: 10px 20px !important;
         display: block !important;
         transition: background 0.2s;
+        white-space: nowrap;
     }
     .sidebar-menu .treeview-menu > li > a:hover {
         background: #f0f0f0 !important;
