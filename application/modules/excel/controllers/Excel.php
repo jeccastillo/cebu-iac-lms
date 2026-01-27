@@ -11594,8 +11594,8 @@ class Excel extends CI_Controller {
             ->setCellValue('F8', 'Middle Name')
             ->setCellValue('G8', 'Track/Strand')
             ->setCellValue('H8', 'General Average')
-            ->setCellValue('H8', 'Honors')
-            ->setCellValue('I8', 'GL');
+            ->setCellValue('I8', 'Honors')
+            ->setCellValue('J8', 'GL');
 
         $i = 9;
         $count = 1;
@@ -11654,7 +11654,7 @@ class Excel extends CI_Controller {
 
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('B'.$i, $index)
+                ->setCellValue('B'.$i, $index + 1)
                 ->setCellValue('C'.$i, str_replace("-", "", $student['student_number']))
                 ->setCellValue('D'.$i, $student['last_name'])
                 ->setCellValue('E'.$i, $student['first_name'])
@@ -11662,7 +11662,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('G'.$i, $student['track'])
                 ->setCellValue('H'.$i, number_format(round($student['gwa'],2),2))
                 ->setCellValue('I'.$i, $honor)
-                ->setCellValue('I'.$i, $student['year_level']);
+                ->setCellValue('J'.$i, $student['year_level']);
 
             $count++;
             $i++;
@@ -11731,7 +11731,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="SHS List of List of Honors - ' . $gradeLevel . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Content-Disposition: attachment;filename="SHS List of Honors - ' . $gradeLevel . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
