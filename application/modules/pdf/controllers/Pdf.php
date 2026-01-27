@@ -4949,6 +4949,7 @@ class Pdf extends CI_Controller {
                 'verified_by' => $post['verified_by'],
                 'registrar' => $post['registrar'],
                 'included_terms' => $included_terms,
+                'senior_high_school' => $post['senior_high_school'],
                 'admission_date' => isset($post['admission_date']) ? $post['admission_date'] : '',
                 'admission_to' => isset($post['admission_to']) ? $post['admission_to'] : '',
                 'graduation_date' => isset($post['graduation_date']) ? $post['graduation_date'] : '',
