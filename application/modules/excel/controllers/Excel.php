@@ -11645,11 +11645,11 @@ class Excel extends CI_Controller {
 
         foreach($gwa_ranks as $index => $student){
             $honor = '';
-            if($gwa >= 97)
+            if($student['gwa'] >= 97)
                 $honor = 'First Honor';
-            else if($gwa >= 93)
+            else if($student['gwa'] >= 93)
                 $honor = 'Second Honor';
-            else if($gwa >= 89)
+            else if($student['gwa'] >= 89)
                 $honor = 'Third Honor';
 
             // Add some data
