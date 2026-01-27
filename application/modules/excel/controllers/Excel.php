@@ -11539,7 +11539,7 @@ class Excel extends CI_Controller {
 
 
     // public function shs_list_of_honors($sem = 0, $year_level = 0)
-    public function shs_gwa_rank($sem = 0, $year_level = 0)
+    public function shs_gwa_rank($sem = 0, $year_level = 0, $program = 0)
     {
         $campus = $this->data['campus'];
         $gradeLevel = 'All Grade Level';
@@ -11558,11 +11558,6 @@ class Excel extends CI_Controller {
              'tb_mas_registration.intAYID' => $sem,
              'tb_mas_programs.type'        => 'shs'
          ]);
-
-        // condition if specific program is selected
-        if ($program != 0) {
-            $this->db->where('tb_mas_users.intProgramID', $program);
-        }
 
         // condition if specific grade level is selected
         if ($year_level != 0) {
@@ -11585,7 +11580,7 @@ class Excel extends CI_Controller {
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
         
-        $title = 'SHS GWA Rank';
+        $title = 'SHS List of Honors';
 
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('B2', 'iACADEMY')
@@ -11724,7 +11719,7 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('B5:I5');
         $sheet->mergeCells('B6:I6');
 
-        $objPHPExcel->getActiveSheet()->setTitle('SHS GWA RANK');
+        $objPHPExcel->getActiveSheet()->setTitle('SHS LIST OF HONORS');
 
         $date = date("ymdhis");
 
@@ -11736,7 +11731,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="SHS List of GWA Rank - ' . $gradeLevel . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Content-Disposition: attachment;filename="SHS List of List of Honors - ' . $gradeLevel . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
