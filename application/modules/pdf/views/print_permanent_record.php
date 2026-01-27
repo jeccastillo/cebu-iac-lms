@@ -16,7 +16,7 @@
 .pagedjs_page_content::after {
     content: "Page "counter(page) " of "counter(pages);
     position: absolute;
-    bottom: -300px;
+    bottom: -255px;
     left: 2px;
     font-size: 12px;
 }
@@ -63,6 +63,7 @@
     position: running(headerRunning);
 } */
 #footer-template {
+    margin-bottom: 120px;
     position: running(footerRunning);
 }
 
@@ -122,12 +123,14 @@
 
 body {
     /* font-family: "Times New Roman", Times, serif; */
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; */
+    /* font-family: "Century Gothic", CenturyGothic, sans-serif; */
+    font-family: century-gothic, sans-serif;
     font-size: 10pt;
-    line-height: 1.4;
+    line-height: normal;
     margin: 0;
     width: 816px !important;
-    display: none;
+
 }
 
 table {
@@ -154,6 +157,7 @@ thead {
 th {
     text-align: left;
     font-weight: normal;
+    padding: 0
 }
 
 td {
@@ -176,7 +180,6 @@ tbody {
     margin-top: 10px
 }
 
-
 .continued-next {
     position: absolute;
     bottom: -27px;
@@ -190,9 +193,9 @@ tbody {
 }
 
 .pagedjs_sheet {
-    /* border: 1px solid red; */
-    width: 816px !important;
-    height: 1344px !important;
+    border: 1px solid red;
+    /* width: 816px !important; */
+    /* height: 1344px !important; */
 }
 
 .pagedjs_area {
@@ -330,16 +333,8 @@ h3 {
     text-transform: capitalize;
 }
 
-@media print {
-    body {
-        /* font-family: "Times New Roman", Times, serif; */
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 10pt;
-        line-height: 1.4;
-        margin: 0;
-        width: 816px !important;
-        display: block;
-    }
+.uppercase {
+    text-transform: uppercase;
 }
 </style>
 <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
@@ -407,8 +402,8 @@ h3 {
             <div class="info-container">
                 <div class="info-row full-width">
                     <span>Name :</span>
-                    <span class="value">
-                        <?php echo $student['strFirstname'] .' '. $student['strMiddlename'] .' '. $student['strLastname']; ?>
+                    <span class="value uppercase">
+                        <?php echo $student['strLastname'] .', '. $student['strFirstname'] .' '. $student['strMiddlename']; ?>
                     </span>
                 </div>
                 <div class="grid-row">
@@ -433,7 +428,7 @@ h3 {
                 </div>
                 <div class="info-row full-width">
                     <span>Address :</span>
-                    <span class="value"><?php echo $student['strAddress']?></span>
+                    <span class="value uppercase"><?php echo $student['strAddress']?></span>
                 </div>
                 <div class="grid-row">
                     <div class="info-group">
@@ -574,6 +569,7 @@ foreach ($records  as $block):
     // }
     class PageContinuationHandler extends Paged.Handler {
         afterPageLayout(pageElement, page, breakToken) {
+
             if (pageElement.querySelector(".continued-next")) return
             const continued = document.createElement("p")
             continued.className = "continued-next"
@@ -588,6 +584,7 @@ foreach ($records  as $block):
                 contentArea.append(continued)
             }
         }
+
     }
     Paged.registerHandlers(PageContinuationHandler)
     // window.PagedPolyfill.preview()
