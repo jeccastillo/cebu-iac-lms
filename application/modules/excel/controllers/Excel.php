@@ -8404,14 +8404,10 @@ class Excel extends CI_Controller {
                     
                     $student = $this->db
                     ->select("tb_mas_users.*")                                        
-                    ->from("tb_mas_users")            
+                    ->from("tb_mas_users")     
                     ->where(array("strStudentNumber"=>$studentNumber))
                     ->get()
                     ->first_row('array');
-
-                    print($studentNumber);
-                    print_r($student);
-                    die();
 
                     if($student){
                         $checkRegistration = $this->db                                    
