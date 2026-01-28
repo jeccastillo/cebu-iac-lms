@@ -62,7 +62,7 @@
     position: running(headerRunning);
 } */
 #footer-template {
-    margin-bottom: 120px;
+    margin-bottom: 100px;
     position: running(footerRunning);
 }
 
