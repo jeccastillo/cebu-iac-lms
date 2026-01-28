@@ -10,7 +10,6 @@
     @bottom-left {
         content: element(footerRunning);
     }
-
 }
 
 .pagedjs_page_content::after {
@@ -130,7 +129,6 @@ body {
     line-height: normal;
     margin: 0;
     width: 816px !important;
-
 }
 
 table {
@@ -409,7 +407,8 @@ h3 {
                 <div class="grid-row">
                     <div class="info-group">
                         <span>ID No. :</span>
-                        <span class="value"><?php echo str_replace('-', '', $student['strStudentNumber']);?></span>
+                        <span
+                            class="value"><?php echo str_replace('-', '', $student['strStudentNumber']);?></span>
                     </div>
                     <div class="info-group">
                         <span>LRN No. :</span>
@@ -488,8 +487,7 @@ foreach ($records  as $block):
     $subjects = $block['records'];
     $details  = $block['other_data'];
         
-?>
-                <table>
+?> <table>
                     <caption>
                         <div class="">
                             <div class="grid-row">
@@ -550,7 +548,8 @@ foreach ($records  as $block):
                         </div>
                         <div class="info-group">
                             <span>Remarks :</span>
-                            <span class="value"><?php echo (int)$details['gwa'] < 75 ? 'FAILED' : 'PASSED'; ?></span>
+                            <span
+                                class="value"><?php echo (int)$details['gwa'] < 75 ? 'FAILED' : 'PASSED'; ?></span>
                         </div>
                     </div>
                 </div> <?php endforeach; ?>
@@ -567,9 +566,30 @@ foreach ($records  as $block):
     //     div.innerHTML = `<b>Course Unit ${i}:</b> Advanced Graphic Design - Grade: 95 (Passed)`
     //     dynamicRows.appendChild(div)
     // }
+    const container = document.createElement('div');
+    container.className = 'grid-row';
+    container.innerHTML = `
+         <div class="info-group" style="margin-bottom:10px">
+             <span style="min-width: 50px;">Name:</span>
+             <span class="value uppercase"><?php echo $student['strLastname'] .', '. $student['strFirstname'] .' '. $student['strMiddlename']; ?></span>
+        </div>
+        <div class="info-group" style="justify-content:center">
+            <span style="min-width: 50px;">ID No.:</span>
+            <span class="value"><?php echo str_replace('-', '', $student['strStudentNumber']);?></span>
+        </div>
+    
+        `;
     class PageContinuationHandler extends Paged.Handler {
         afterPageLayout(pageElement, page, breakToken) {
-
+            console.log(page.position);
+            const parent = pageElement.querySelector(".content-area")
+            const child = document.createElement("p")
+            if (page.position > 0) {
+                console.log(child);
+                if (parent) {
+                    parent.prepend(container)
+                }
+            }
             if (pageElement.querySelector(".continued-next")) return
             const continued = document.createElement("p")
             continued.className = "continued-next"
@@ -584,7 +604,6 @@ foreach ($records  as $block):
                 contentArea.append(continued)
             }
         }
-
     }
     Paged.registerHandlers(PageContinuationHandler)
     // window.PagedPolyfill.preview()

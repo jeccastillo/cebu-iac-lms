@@ -13,7 +13,8 @@
             <select @change="changeTerm($event)" class="form-control" v-model="current_sem">
                 <option v-for="term in terms" :value="term.intID">{{ term.term_student_type }}
                     {{ term.enumSem }} {{ term.term_label }} SY {{ term.strYearStart }} -
-                    {{ term.strYearEnd }}</option>
+                    {{ term.strYearEnd }}
+                </option>
             </select>
         </div>
         <hr />
@@ -154,7 +155,7 @@
                                                 </select>
                                             </td>
                                             <td><button
-                                                    @click.prevent.stop="deleteScholarship(item.intID)"
+                                                    @click.prevent.stop="deleteScholarship(item.id)"
                                                     class="btn btn-danger">Delete</button></td>
                                         </tr>
                                     </tbody>
