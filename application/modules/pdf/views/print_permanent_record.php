@@ -114,7 +114,7 @@
 }
 
 .signature-line {
-    border-top: 1px solid black;
+    border-top: 2px solid black;
     text-align: center;
     padding-top: 5px;
     width: 100%;
@@ -225,7 +225,7 @@ h3 {
 }
 
 .blank-line {
-    border-bottom: 1px solid #000;
+    border-bottom: 2px solid #000;
     min-width: 150px;
     flex-grow: 1;
     display: inline-block;
@@ -265,7 +265,7 @@ h3 {
 
 .underline {
     flex-grow: 1;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid black;
     padding-left: 5px;
     /* min-height: 18px; */
     max-width: 200px;
@@ -581,20 +581,20 @@ foreach ($records  as $block):
         `;
     class PageContinuationHandler extends Paged.Handler {
         afterPageLayout(pageElement, page, breakToken) {
-            console.log(page.position);
             const parent = pageElement.querySelector(".content-area")
             const child = document.createElement("p")
             if (page.position > 0) {
-                console.log(child);
                 if (parent) {
                     parent.prepend(container)
                 }
             }
+            console.log();
             if (pageElement.querySelector(".continued-next")) return
             const continued = document.createElement("p")
             continued.className = "continued-next"
             if (breakToken) {
-                continued.textContent = `Continue on page ${page.position + 1}`
+                continued.textContent =
+                    `Continue on page ${parseInt(page.id.split("-")[1]) + 1}`
             } else {
                 continued.textContent = `****Nothing Follows****`
             }
