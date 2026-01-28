@@ -1449,7 +1449,7 @@ class Registrar extends CI_Controller {
         }
     }
 
-    public function shs_gwa_rank_data2($sem = 0, $year_level = 0, $program = 0)
+    public function shs_gwa_rank_data($sem = 0, $year_level = 0, $program = 0)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
@@ -1526,9 +1526,8 @@ class Registrar extends CI_Controller {
         echo json_encode($gwa_ranks);
     }
     
-    public function shs_gwa_rank_data($sem = 0, $year_level = 0, $program = 0)
+    public function shs_list_of_honors_data($sem = 0, $year_level = 0, $program = 0)
     {
-        
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
         {
