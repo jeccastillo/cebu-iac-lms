@@ -11537,9 +11537,7 @@ class Excel extends CI_Controller {
         exit;
     }
 
-
-    // public function shs_list_of_honors($sem = 0, $year_level = 0)
-    public function shs_gwa_rank($sem = 0, $year_level = 0, $program = 0)
+    public function shs_list_of_honors($sem = 0, $year_level = 0)
     {
         $campus = $this->data['campus'];
         $gradeLevel = 'All Grade Level';
