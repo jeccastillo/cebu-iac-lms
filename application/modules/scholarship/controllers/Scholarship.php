@@ -334,7 +334,7 @@ class Scholarship extends CI_Controller {
             'tb_mas_scholarships.name LIKE' => '%Referral%'
         ))->result_array();
 
-        $student_discounts = $this->db->select('tb_mas_scholarships.*')
+        $student_discounts = $this->db->select('tb_mas_scholarships.*, tb_mas_student_discount.id')
         ->join('tb_mas_scholarships', 'tb_mas_student_discount.discount_id = tb_mas_scholarships.intID')
         ->get_where('tb_mas_student_discount', array(
             'tb_mas_student_discount.student_id' => $student,
