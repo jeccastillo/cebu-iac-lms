@@ -147,7 +147,8 @@
         text-decoration: none;
         padding: 8px 12px;
         display: block;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
+        font-weight: 400;
         border-radius: 4px;
         transition: background 0.2s;
     }
