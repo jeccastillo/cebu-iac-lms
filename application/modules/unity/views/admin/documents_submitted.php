@@ -6,6 +6,7 @@
                     <div class="col-md-5">
                         <label>Documents</label>
                         <select v-model="documentDetails.document" required class="form-control">
+                            <option value="" selected></option>
                             <option value="2x2 id pic">2pcs. of 2x2 ID pic</option>
                             <option value="affidavit of support">Affidavit of Support</option>
                             <option value="certificate of good moral">Certificate of Good Moral

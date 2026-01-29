@@ -1520,26 +1520,28 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             }).then((result) => {})
         },
-        submitDocument() {
-            console.log(this.documentDetails);
+        submitDocument(e) {
             var formData = new FormData();
             for (const [key, value] of Object.entries(this.documentDetails)) {
                 formData.append(key, value);
             }
-            console.log(formData);
             axios.post(base_url + 'unity/add_student_document', formData, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 }
             }).then(data => {
                 this.loader_spinner = false;
+                axios.get(this.base_url + 'unity/student_viewer_data/' + this.id +
+                    '/' + this.sem).then((data) => {
+                    this.documents = data.data.documents
+                    this.documentDetails.document = ''
+                    this.documentDetails.remarks = ''
+                })
                 Swal.fire({
                     title: "Success",
                     text: data.data.message,
                     icon: "success"
                 })
-                location.href = "<?php echo base_url(); ?>unity/student_viewer/" +
-                    this.id;
             })
         },
         removeDocument(id) {
@@ -1551,13 +1553,15 @@ new Vue({
                 }
             }).then(data => {
                 this.loader_spinner = false;
+                axios.get(this.base_url + 'unity/student_viewer_data/' + this.id +
+                    '/' + this.sem).then((data) => {
+                    this.documents = data.data.documents
+                })
                 Swal.fire({
                     title: "Success",
                     text: data.data.message,
                     icon: "success"
                 })
-                location.href = "<?php echo base_url(); ?>unity/student_viewer/" +
-                    this.id;
             })
         },
     }
