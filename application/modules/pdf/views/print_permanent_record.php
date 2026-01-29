@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.1/normalize.css">
 <style>
 @page {
     size: legal;
@@ -12,12 +13,17 @@
     }
 }
 
-.pagedjs_page_content::after {
+.footer-container::after {
     content: "Page "counter(page) " of "counter(pages);
     position: absolute;
-    bottom: -255px;
-    left: 2px;
+    bottom: 50px;
+    left: 40px;
     font-size: 12px;
+}
+
+.pagedjs_page_content {
+    max-height: 850px !important;
+    /* overflow: hidden; */
 }
 
 .info-container {
@@ -121,13 +127,10 @@
 }
 
 body {
-    /* font-family: "Times New Roman", Times, serif; */
-    /* font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; */
-    /* font-family: "Century Gothic", CenturyGothic, sans-serif; */
     font-family: century-gothic, sans-serif;
     font-size: 10pt;
     line-height: normal;
-    margin: 0;
+    margin: 0 auto;
     width: 816px !important;
 }
 
@@ -180,7 +183,7 @@ tbody {
 
 .continued-next {
     position: absolute;
-    bottom: -27px;
+    bottom: -22px;
     left: 0;
     right: 0;
     font-size: 10pt;
@@ -191,7 +194,7 @@ tbody {
 }
 
 .pagedjs_sheet {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     /* width: 816px !important; */
     /* height: 1344px !important; */
 }
@@ -588,7 +591,6 @@ foreach ($records  as $block):
                     parent.prepend(container)
                 }
             }
-            console.log();
             if (pageElement.querySelector(".continued-next")) return
             const continued = document.createElement("p")
             continued.className = "continued-next"
@@ -606,6 +608,5 @@ foreach ($records  as $block):
         }
     }
     Paged.registerHandlers(PageContinuationHandler)
-    // window.PagedPolyfill.preview()
     </script>
 </body>
