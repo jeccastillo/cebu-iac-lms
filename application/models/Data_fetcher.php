@@ -4347,13 +4347,6 @@ class Data_fetcher extends CI_Model {
         }
 
         $cl = array_merge($notCombined, $combined);
-        // print(gettype($classlist) . ' @ ');
-        // print(gettype($cl) . ' @ ');
-        print_r($combined);
-        print(' @@@@@@@@@@@@@@@@@@@@ ');
-        print_r($notCombined);
-        die();
-        
         
         foreach($cl as $c){
                 $c['adjustments'] = $this->db->where(array('classlist_student_id'=> $c['subjectID'],'syid'=>$classlist,'student_id'=>$id))                                          
