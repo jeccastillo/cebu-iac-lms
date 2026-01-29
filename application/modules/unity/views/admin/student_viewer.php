@@ -160,33 +160,28 @@
                           class="img-responsive"
                           :src="picture" />
                       </div>
-                      <div class="col-lg-3">
-                        <p><strong>Student Number:
-                          </strong>{{ student.strStudentNumber.replace(/-/g, '') }}</p>
-                        <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->                        
-                        <div v-if="registration">                          
-                          <label>Block Section</label>
-                          <select @change="updateBlock($event)" id="block_section" name="block_section" class="form-control" v-model="registration.block_section">                        
-                              <option v-for="block in block_sections" :value="block.intID">{{ block.name }}</option>                                  
-                          </select>
-                        </div>
-                            
-                        <p><strong>Gender:
-                          </strong>{{ student.enumGender }}</p>
-                          
-                        <p><strong>Address: </strong>{{ student.strAddress }}</p>
-                        <p><strong>Contact: </strong>{{ student.strMobileNumber }}</p>
-                        <!-- <p><strong>Institutional Email: </strong>{{ student.strGSuiteEmail' }}</p>   -->
-                        <p><strong>Personal Email: </strong>{{ student.strEmail }}</p>
-                        <p><strong>Birthdate: </strong>{{ student.dteBirthDate }}</p>
-                        <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>
-                        <p><strong>Admission Status: </strong>{{ applicant_data.tos }}</p>
-                        <p><strong>Country of Citizenship:</strong> {{ applicant_data.citizenship }}
-                          </li>
+                      <div class="col-lg-5">
+                        <p><strong>Student Number:</strong> {{ student.strStudentNumber.replace(/-/g, '') }}</p>
+                        <p><strong>Gender:</strong> {{ student.enumGender }}</p>
+                        <p><strong>Address:</strong> {{ student.strAddress }}</p>
+                        <p><strong>Contact:</strong> {{ student.strMobileNumber }}</p>
+                        <p><strong>Personal Email:</strong> {{ student.strEmail }}</p>
+                        <p><strong>Birthdate:</strong> {{ student.dteBirthDate }}</p>
+                        <p><strong>Date Created:</strong> {{ student.dteCreated }}</p>
+                        <p><strong>Admission Status:</strong> {{ applicant_data.tos }}</p>
+                        <p><strong>Country of Citizenship:</strong> {{ applicant_data.citizenship }}</p>
+                      </div>
+                      <div class="col-lg-4">
                         <div v-if="registration">
-                          <p><strong>Enrollment Type: </strong>
-                            <select class="form-control" @change="updateStudentType($event)"
-                              v-model="registration.enumStudentType">
+                          <div class="form-group">
+                            <label>Block Section</label>
+                            <select @change="updateBlock($event)" id="block_section" name="block_section" class="form-control" v-model="registration.block_section">
+                              <option v-for="block in block_sections" :value="block.intID">{{ block.name }}</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label>Enrollment Type</label>
+                            <select class="form-control" @change="updateStudentType($event)" v-model="registration.enumStudentType">
                               <option value="new">New</option>
                               <option value="freshman">Freshman</option>
                               <option value="continuing">Continuing</option>
@@ -197,72 +192,69 @@
                               <option value="transferee">Transferee</option>
                               <option value="acadRes">Academic Residency</option>
                             </select>
-                          </p>
-                          <p><strong>Year Level: </strong>
-                            <select class="form-control" @change="updateStudentYearLevel($event)"
-                              v-model="registration.intYearLevel">
+                          </div>
+                          <div class="form-group">
+                            <label>Year Level</label>
+                            <select class="form-control" @change="updateStudentYearLevel($event)" v-model="registration.intYearLevel">
                               <option value=1>1</option>
                               <option value=2>2</option>
                               <option value=3>3</option>
                               <option value=4>4</option>
                             </select>
-                          </p>
-                          <p><strong>Academic Status: </strong>
-                            <select class="form-control" @change="updateAcademicStatus($event)"
-                              v-model="registration.enumRegistrationStatus">
+                          </div>
+                          <div class="form-group">
+                            <label>Academic Status</label>
+                            <select class="form-control" @change="updateAcademicStatus($event)" v-model="registration.enumRegistrationStatus">
                               <option value="regular">Regular</option>
                               <option value="irregular">Irregular</option>
                             </select>
-                          </p>
-                          <p v-if="user_level == 2"><strong>Enrollment Status: </strong>
-                            <select class="form-control" @change="updateEnrollmentStatus($event)"
-                              v-model="registration.intROG">                              
+                          </div>
+                          <div v-if="user_level == 2" class="form-group">
+                            <label>Enrollment Status</label>
+                            <select class="form-control" @change="updateEnrollmentStatus($event)" v-model="registration.intROG">
                               <option value=0>Enlisted</option>
-                              <option value=1>Enrolled</option>                              
+                              <option value=1>Enrolled</option>
                               <option value=3>Withdrawn</option>
                               <option value=4>LOA</option>
                               <option value=5>AWOL</option>
                             </select>
-                          </p>
-                          <p v-if="user_level == 2"><strong>Withdrawal Period (for students that withdrawn for the term): </strong>
-                            <select class="form-control" @change="updateWithdrawalPeriod($event)"
-                              v-model="registration.withdrawal_period">                              
+                          </div>
+                          <div v-if="user_level == 2" class="form-group">
+                            <label>Withdrawal Period</label>
+                            <select class="form-control" @change="updateWithdrawalPeriod($event)" v-model="registration.withdrawal_period">
                               <option value="before">before</option>
-                              <option value="after">after</option>                              
-                              <option value="end">end</option>                              
+                              <option value="after">after</option>
+                              <option value="end">end</option>
                             </select>
-                          </p>
-                          <p><strong>Internship: </strong>
-                            <select class="form-control" @change="updateInternshipStatus($event)"
-                              v-model="registration.internship">
+                          </div>
+                          <div class="form-group">
+                            <label>Internship</label>
+                            <select class="form-control" @change="updateInternshipStatus($event)" v-model="registration.internship">
                               <option value=0>No</option>
                               <option value=1>Yes</option>
                             </select>
-                          </p>
-                          <p><strong>Current Program: </strong>
-                            <select class="form-control" @change="updateCurrentProgram($event)"
-                              v-model="registration.current_program">
-                              <option v-for="prog in programs" :value="prog.intProgramID">{{ prog.strProgramCode }}</option>                              
+                          </div>
+                          <div class="form-group">
+                            <label>Current Program</label>
+                            <select class="form-control" @change="updateCurrentProgram($event)" v-model="registration.current_program">
+                              <option v-for="prog in programs" :value="prog.intProgramID">{{ prog.strProgramCode }}</option>
                             </select>
-                          </p>
-                          <p><strong>Date Enrolled: </strong>
-                            <input class="form-control" type="datetime-local" @blur="updateDateEnrolled($event)"
-                              v-model="registration.dteRegistered">                                                          
-                          </p>
-                          <p><strong>Date Enlisted (date student is going to enroll): </strong>
-                            <input class="form-control" type="datetime-local" @blur="updateDateEnlisted($event)"
-                              v-model="registration.date_enlisted">                                                          
-                          </p>                          
-                          <p><strong>Tuition Year</strong>
-                            <select class="form-control"
-                                @change="selectTuitionYear($event)"
-                                v-model="registration.tuition_year">
-                                <option v-for="ty in tuition_years"
-                                    :value="ty.intID">{{ ty.year}}</option>
+                          </div>
+                          <div class="form-group">
+                            <label>Date Enrolled</label>
+                            <input class="form-control" type="datetime-local" @blur="updateDateEnrolled($event)" v-model="registration.dteRegistered">
+                          </div>
+                          <div class="form-group">
+                            <label>Date Enlisted</label>
+                            <input class="form-control" type="datetime-local" @blur="updateDateEnlisted($event)" v-model="registration.date_enlisted">
+                          </div>
+                          <div class="form-group">
+                            <label>Tuition Year</label>
+                            <select class="form-control" @change="selectTuitionYear($event)" v-model="registration.tuition_year">
+                              <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}</option>
                             </select>
-                          </p>
+                          </div>
                         </div>
-                        <hr />
                       </div>
                       <div class="col-lg-6">
                         <table class="table table-bordered">
