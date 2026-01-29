@@ -286,33 +286,8 @@ class Scholarship extends CI_Controller {
                 'deduction_type' => 'scholarship',
                 'deduction_from !=' => 'in-house',                
             ))->result_array();
-
-        } elseif ($has_external) {
-            
-            $discounts = $this->db->get_where('tb_mas_scholarships', array(
-                'status' => 'active',
-                'deduction_type' => 'discount',
-                'deduction_from !=' => 'external',
-                'name NOT LIKE' => '%Referral%'                    
-            ))->result_array();
-            if($count_referral < $max_referral){
-                $ref_discounts = $this->db->get_where('tb_mas_scholarships', array(
-                    'status' => 'active',
-                    'deduction_type' => 'discount',                    
-                    'name LIKE' => '%Referral%'
-                ))->result_array();
-
-            } else {
-                $ref_discounts = [];                
-            }
-
-            $scholarships = $this->db->get_where('tb_mas_scholarships', array(
-                'status' => 'active',
-                'deduction_type' => 'scholarship',
-                'deduction_from !=' => 'external',                
-            ))->result_array();
-
-        } else {
+        }
+        else {
             $discounts = $this->db->get_where('tb_mas_scholarships', array(
                 'status' => 'active',
                 'deduction_type' => 'discount',
