@@ -73,10 +73,11 @@
             <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="widget-user-header bg-red">
               <!-- /.widget-user-image -->
+              <div class="widget-user-image">
                <img :src="picture"
-                  alt="User Avatar"
-                  class="widget-user-image"
+                  alt="User Avatar"                  
                   style="float:left;margin-top:-78px;" />              
+              </div>
               <h3 class="widget-user-username"
                 style="text-transform:capitalize;margin-left:5px;font-size:1.3em;">                                
                 {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
@@ -707,7 +708,7 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.12);
   }
 
-  img.widget-user-image {
+  .widget-user-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
