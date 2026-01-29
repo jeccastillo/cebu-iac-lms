@@ -1,25 +1,17 @@
 <aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
-            Records
-            <small>
-                <a class="btn btn-app" :href="base_url + 'unity/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a> 
-                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#printTranscript" ><i class="fa fa-print"></i>Print TOR/TCG</a>                                       
-                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#creditSubjects" ><i class="fa fa-plus"></i>Add Credits</a>                
-                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#unitEarnedModal" ><i class="fa fa-print"></i>Certificate of Unit Earned</a>
-                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#certificateOfEnrollmentModal" ><i class="fa fa-print"></i>Certificate of Enrollment</a>         
-                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#certificateOfGWAModal" ><i class="fa fa-print"></i>Certificate of GWA</a>         
-            </small>
+            Records            
         </h1>
         <hr />
     </section>
         <hr />
     <div class="content">        
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <div v-if="student" class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
-                <div class="widget-user-header bg-red">
+                <div class="widget-user-header bg-blue">
                     <!-- /.widget-user-image -->
                     <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }} {{ student.strMiddlename?student.strMiddlename.toUpperCase():'' }}</h3>
                     <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }} {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
@@ -31,6 +23,18 @@
                 </div>
             </div>                
         </div> 
+        <div class="col-sm-6">
+            <small>
+                <ul class="toolbar-tabs">
+                    <li><a class="toolbar-link" :href="base_url + 'unity/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a></li>
+                    <li><a class="toolbar-link" href="#" data-toggle="modal" data-target="#printTranscript" ><i class="fa fa-print"></i>Print TOR/TCG</a></li>                                       
+                    <li><a class="toolbar-link" href="#" data-toggle="modal" data-target="#creditSubjects" ><i class="fa fa-plus"></i>Add Credits</a></li>                
+                    <li><a class="toolbar-link" href="#" data-toggle="modal" data-target="#unitEarnedModal" ><i class="fa fa-print"></i>Certificate of Unit Earned</a></li>
+                    <li><a class="toolbar-link" href="#" data-toggle="modal" data-target="#certificateOfEnrollmentModal" ><i class="fa fa-print"></i>Certificate of Enrollment</a></li>
+                    <li><a class="toolbar-link" href="#" data-toggle="modal" data-target="#certificateOfGWAModal" ><i class="fa fa-print"></i>Certificate of GWA</a></li>
+                </ul>
+            </small>
+        </div>                
         <div class="col-sm-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
