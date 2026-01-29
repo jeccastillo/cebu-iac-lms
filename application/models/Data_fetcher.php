@@ -4338,12 +4338,6 @@ class Data_fetcher extends CI_Model {
                     ->result_array();
 
         foreach($classlist as $c){
-            $combined = $this->db
-                    ->select('intSubjectID')
-                    ->from('tb_mas_curriculum_second')
-                    ->where(array('intCurriculumID'=>$c['intCurriculumID']))
-                    ->get()
-                    ->result_array();
             $checkCombinedSubject = $this->db->get_where('tb_mas_curriculum_second',array('intID'=>$c['intCurriculumID']))->first_row('array');    
             if($checkCombinedSubject){
                 $combined[] = $c;
@@ -4353,10 +4347,10 @@ class Data_fetcher extends CI_Model {
         }
 
         $cl = array_merge($notCombined, $combined);
-        print_r($classlist);
-        print(' @@@@@@@@@@@@@@@@@@@@ ');
-        print_r($cl);
-        die();
+        // print_r($classlist);
+        // print(' @@@@@@@@@@@@@@@@@@@@ ');
+        // print_r($cl);
+        // die();
         
         
         foreach($cl as $c){
