@@ -69,7 +69,7 @@
           <div v-if="student"
             class="box box-widget widget-user-2">
             <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-red">
+            <div class="widget-user-header bg-blue">
               <!-- /.widget-user-image -->
               <div class="user-image" style="float:left;margin-top:-78px;">
                <img :src="picture"
