@@ -233,6 +233,15 @@
                           </tr>
                         </table>
                         </div>
+                        </div>
+                        </div>
+                        </div>
+                        <div class="box box-default">
+                        <div class="box-header with-border">
+                          <h3 class="box-title"><i class="fa fa-settings"></i> Registrar Options</h3>
+                        </div>
+                        <div class="box-body">
+                          <div class="row">
                         <div v-if="registration">
                         <div class="col-lg-6">                        
                           <div class="form-group">
