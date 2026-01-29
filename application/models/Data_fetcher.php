@@ -4347,12 +4347,12 @@ class Data_fetcher extends CI_Model {
         }
 
         $cl = array_merge($notCombined, $combined);
-        print(gettype($classlist) . ' @ ');
-        print(gettype($cl) . ' @ ');
-        print_r($classlist);
-        print(' @@@@@@@@@@@@@@@@@@@@ ');
-        print_r($cl);
-        die();
+        // print(gettype($classlist) . ' @ ');
+        // print(gettype($cl) . ' @ ');
+        // print_r($classlist);
+        // print(' @@@@@@@@@@@@@@@@@@@@ ');
+        // print_r($cl);
+        // die();
         
         
         foreach($cl as $c){
