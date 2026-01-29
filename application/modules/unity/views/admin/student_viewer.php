@@ -124,6 +124,9 @@
             <ul class="nav nav-tabs">
               <li :class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1"
                   data-toggle="tab">Personal Information</a></li>
+              <li v-if="registration && advanced_privilages2"
+                  :class="[(tab == 'tab_7') ? 'active' : '']"><a href="#tab_7"
+                      data-toggle="tab">Registrar Options</a></li>                                        
               <li v-if="advanced_privilages1"
                 :class="[(tab == 'tab_2') ? 'active' : '']"><a href="#tab_2"
                   data-toggle="tab">Subjects</a></li>
@@ -139,7 +142,7 @@
                   data-toggle="tab">Schedule</a></li>
               <li v-if="registration && advanced_privilages2"
                   :class="[(tab == 'tab_6') ? 'active' : '']"><a href="#tab_6"
-                      data-toggle="tab">Document Submitted</a></li>
+                      data-toggle="tab">Document Submitted</a></li>              
               <li v-if="advanced_privilages2"><a
                   :href="base_url + 'unity/adjustments/' + student.intID + '/' + selected_ay">Adjustments</a>
               </li>
@@ -245,6 +248,9 @@
                         </div>
                         </div>
                         </div>
+                        <div :class="[(tab == 'tab_7') ? 'active' : '']"
+                          class="tab-pane"
+                          id="tab_7">
                         <div class="box box-default">
                         <div class="box-header with-border">
                           <h3 class="box-title"><i class="fa fa-settings"></i> Registrar Options</h3>
@@ -349,7 +355,8 @@
                   </div>
                 </div>                           
                         
-                </div>                      
+                </div>             
+              </div>         
               <!-- /.tab-pane -->
               <div v-if="advanced_privilages1"
                 :class="[(tab == 'tab_2') ? 'active' : '']"
