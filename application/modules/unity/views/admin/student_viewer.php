@@ -235,33 +235,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
-                            <th>High School:</th>
-                            <td>{{ student.high_school }}</td>
-                            <td>{{ student.high_school_address }}</td>
-                            <td>{{ student.high_school_attended }}</td>
-                          </tr>
-                          <tr>
-                            <th>SHS:</th>
-                            <td>{{ student.senior_high }}</td>
-                            <td>{{ student.senior_high_address }}</td>
-                            <td>{{ student.senior_high_attended }}</td>
-                          </tr>
-                          <tr>
-                            <th>College:</th>
-                            <td>{{ student.college }}</td>
-                            <td>{{ student.college_address }}</td>
-                            <td>{{ student.college_attended_from }}</td>
-                          </tr>
-                          <tr>
-                            <th></th>
-                            <td></td>
-                            </td>
-                            <td></td>
-                            <td>{{ student.college_attended_to }}</td>
-                          </tr>
-                        </table>
-                      </div>
+                </div>                           
                       <div class="col-lg-4">
                         <div v-if="registration">
                           <div class="form-group">
