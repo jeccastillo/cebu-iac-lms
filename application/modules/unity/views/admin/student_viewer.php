@@ -3,85 +3,24 @@
     <section class="content-header">
       <h1>
         <small>
-          <a class="btn btn-app"
-            :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All
-          </a>
-          <a target="_blank" class="btn btn-app"
-            :href="base_url + 'admissionsV1/view_lead_new/' + student.slug"><i class="fa fa-list"></i>
-            Applicant Data</a>
-          <a v-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i>
-            Edit</a>
-          <a v-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'unity/student_records/' + student.intID"><i
-              class="fa fa-user"></i>Records</a>
-          <a v-if="registration && (user_level == 2 || user_level == 3)" :disabled="show_alert && registration.allow_enroll == 0" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
-              <i class="ion ion-printer"></i>RF Print
-          </a>                     
-          <a target="_blank" 
-            v-if="registration && (user_level == 2 || user_level == 3)" :disabled="show_alert && registration.allow_enroll == 0"
-            class="btn btn-app"
-            href="#"
-            @click.prevent="printRF">
-            <i class="ion ion-printer"></i>RF No Header
-          </a>
-          <a v-if="reg_status == 'Enrolled' && (user_level == 2 || user_level == 3)"
-            class="btn btn-app"
-            :href="base_url + 'registrar/shifting/' + student.intID + '/' + active_sem.intID">
-            <i class="fa fa-arrows-h"></i>Shifting
-          </a>
-          <a class="btn btn-app"
-            :href="base_url + 'deficiencies/student_deficiencies/' + student.intID">
-            <i class="fa fa-user"></i>Deficiencies
-          </a>
-
-          <a v-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'academics/enlistment/' + student.intID + '/' + active_sem.intID">
-            <i class="fa fa-book"></i>Advising Form</a>
-          </a>
-          <a v-if="reg_status != 'For Subject Enlistment' && reg_status != 'For Sectioning' && (user_level == 2 || user_level == 3)"
-            target="_blank"
-            class="btn btn-app"
-            :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
-            <i class="ion ion-printer"></i>Print Subjects
-          </a>
-          <a v-else-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'department/load_subjects/' + student.intID + '/' + active_sem.intID">
-            <i class="fa fa-book"></i>Subject Enlistment</a>
-          </a>
-          
-          <!-- <a v-if="reg_status == 'For Registration' && (user_level == 2 || user_level == 3)"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
-                        <i class="fa fa-book"></i> Update Sections
-                    </a>                         -->
-          <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)"
-            class="btn btn-app"
-            :href="base_url + 'registrar/register_old_student2/' + student.intID +  '/' + active_sem.intID">
-            <i class="fa fa-book"></i>Student Fee Assessment
-          </a>
-          <a v-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'registrar/student_grade_slip/' + student.intID">
-            <i class="fa fa-book"></i>Grade Slip
-          </a>
-          <a v-if="user_level == 2 || user_level == 7"
-            class="btn btn-app"
-            :href="base_url + 'scholarship/assign_scholarship/'+sem_student+'/'+ student.intID">
-            <i class="fa fa-book"></i>Scholarship/Discount
-          </a>
-          <a v-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            data-toggle="modal"
-            data-target="#loa-modal">
-            <i class="fa fa-book"></i>LOA
-          </a>
-          <a v-if="(user_level == 2 || user_level == 3) && registration"
-            class="btn btn-app" @click="sendEnlistedNotification">
-            <i class="fa fa-book"></i>Send Enlistment Notification
-          </a>          
+          <ul class="toolbar-tabs">
+            <li><a class="toolbar-link" :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i><span>All</span></a></li>
+            <li><a class="toolbar-link" target="_blank" :href="base_url + 'admissionsV1/view_lead_new/' + student.slug"><i class="fa fa-list"></i><span>Applicant Data</span></a></li>
+            <li v-if="user_level == 2 || user_level == 3"><a class="toolbar-link" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i><span>Edit</span></a></li>
+            <li v-if="user_level == 2 || user_level == 3"><a class="toolbar-link" :href="base_url + 'unity/student_records/' + student.intID"><i class="fa fa-user"></i><span>Records</span></a></li>
+            <li v-if="registration && (user_level == 2 || user_level == 3)"><a class="toolbar-link" target="_blank" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID"><i class="ion ion-printer"></i><span>RF Print</span></a></li>
+            <li v-if="registration && (user_level == 2 || user_level == 3)"><a class="toolbar-link" href="#" @click.prevent="printRF"><i class="ion ion-printer"></i><span>RF No Header</span></a></li>
+            <li v-if="reg_status == 'Enrolled' && (user_level == 2 || user_level == 3)"><a class="toolbar-link" :href="base_url + 'registrar/shifting/' + student.intID + '/' + active_sem.intID"><i class="fa fa-arrows-h"></i><span>Shifting</span></a></li>
+            <li><a class="toolbar-link" :href="base_url + 'deficiencies/student_deficiencies/' + student.intID"><i class="fa fa-user"></i><span>Deficiencies</span></a></li>
+            <li v-if="user_level == 2 || user_level == 3"><a class="toolbar-link" :href="base_url + 'academics/enlistment/' + student.intID + '/' + active_sem.intID"><i class="fa fa-book"></i><span>Advising Form</span></a></li>
+            <li v-if="reg_status != 'For Subject Enlistment' && reg_status != 'For Sectioning' && (user_level == 2 || user_level == 3)"><a class="toolbar-link" target="_blank" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID"><i class="ion ion-printer"></i><span>Print Subjects</span></a></li>
+            <li v-else-if="user_level == 2 || user_level == 3"><a class="toolbar-link" :href="base_url + 'department/load_subjects/' + student.intID + '/' + active_sem.intID"><i class="fa fa-book"></i><span>Subject Enlistment</span></a></li>
+            <li v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)"><a class="toolbar-link" :href="base_url + 'registrar/register_old_student2/' + student.intID +  '/' + active_sem.intID"><i class="fa fa-book"></i><span>Student Fee Assessment</span></a></li>
+            <li v-if="user_level == 2 || user_level == 3"><a class="toolbar-link" :href="base_url + 'registrar/student_grade_slip/' + student.intID"><i class="fa fa-book"></i><span>Grade Slip</span></a></li>
+            <li v-if="user_level == 2 || user_level == 7"><a class="toolbar-link" :href="base_url + 'scholarship/assign_scholarship/'+sem_student+'/'+ student.intID"><i class="fa fa-book"></i><span>Scholarship/Discount</span></a></li>
+            <li v-if="user_level == 2 || user_level == 3"><a class="toolbar-link" data-toggle="modal" data-target="#loa-modal"><i class="fa fa-book"></i><span>LOA</span></a></li>
+            <li v-if="(user_level == 2 || user_level == 3) && registration"><a class="toolbar-link" href="#" @click.prevent="sendEnlistedNotification"><i class="fa fa-book"></i><span>Send Enlistment Notification</span></a></li>
+          </ul>
         </small>
 
         <div class="box-tools pull-right">
@@ -755,6 +694,16 @@
 .select2-container {
   display: block !important;
 }
+</style>
+<style>
+.toolbar-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.toolbar-tabs li{display:inline-flex}
+.toolbar-link{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fff;border:1px solid #e1e6ea;border-radius:6px;color:#333;text-decoration:none;font-size:13px}
+.toolbar-link i{font-size:16px;color:#2c3e50}
+.toolbar-link span{white-space:nowrap}
+.toolbar-link:hover{background:#f5f7f9;border-color:#d0d7de}
+.toolbar-right{margin-left:auto}
+.toolbar-select{min-width:260px}
 </style>
 <!-- Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
