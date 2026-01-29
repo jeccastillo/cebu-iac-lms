@@ -868,6 +868,13 @@ new Vue({
       loa_remarks: '',
       loa_date: ''
     },
+    documentDetails: {
+        document: '',
+        dateSubmitted: new Date().toISOString().split('T')[0],
+        studentID: '<?php echo $id; ?>',
+        user: <?php echo json_encode($user['strFirstname'] . ' ' .$user['strLastname']) ; ?>,
+        remarks: ''
+    },
     documents: []
   },
 
