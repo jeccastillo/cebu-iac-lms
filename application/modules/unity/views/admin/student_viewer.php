@@ -17,34 +17,7 @@
       <div style="clear:both"></div>      
     </section>
     <hr />
-    <div class="content">
-      <div class="row"
-        v-if="show_alert">
-        <div class="alert alert-danger col-sm-6"
-          role="alert">
-          <h4 class="alert-heading">Alert!</h4>
-          <p>This Student still has remaining balances:</p>
-        </div>
-        <div class="col-sm-6">
-          <table class="table table-bordered thead-dark table-striped">
-            <thead>
-              <tr>
-                <th>Term</th>
-                <th>Payment Type</th>
-                <th>Balance</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in term_balances"
-                v-if="item.balance > 0">
-                <td>{{ item.term }}</td>
-                <td>{{ item.payment_type }}</td>
-                <td><strong>P{{ item.formatted_balance }}</strong></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <div class="content">      
       <div class="row">        
         <div class="col-sm-6">
           <div v-if="student"
@@ -118,6 +91,33 @@
                 <li v-if="(user_level == 2 || user_level == 3) && registration"><a class="toolbar-link" href="#" @click.prevent="sendEnlistedNotification"><i class="fa fa-book"></i><span>Send Enlistment Notification</span></a></li>
               </ul>
           </small>
+          <div class="row"
+              v-if="show_alert">
+              <div class="alert alert-danger col-sm-6"
+                role="alert">
+                <h4 class="alert-heading">Alert!</h4>
+                <p>This Student still has remaining balances:</p>
+              </div>
+              <div class="col-sm-6">
+                <table class="table table-bordered thead-dark table-striped">
+                  <thead>
+                    <tr>
+                      <th>Term</th>
+                      <th>Payment Type</th>
+                      <th>Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in term_balances"
+                      v-if="item.balance > 0">
+                      <td>{{ item.term }}</td>
+                      <td>{{ item.payment_type }}</td>
+                      <td><strong>P{{ item.formatted_balance }}</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
         </div>
         <div class="col-sm-12">
           <div class="nav-tabs-custom">
