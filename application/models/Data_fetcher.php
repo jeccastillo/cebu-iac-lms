@@ -4338,7 +4338,7 @@ class Data_fetcher extends CI_Model {
                     ->result_array();
 
         foreach($getClasslist as $c){
-            $checkCombinedSubject = $this->db->get_where('tb_mas_curriculum_second',array('intID'=>$c['intCurriculumID']))->first_row('array');    
+            $checkCombinedSubject = $this->db->get_where('tb_mas_curriculum_second',array('intSubjectID'=>$c['intSubjectID'],'intCurriculumID'=>$c['intCurriculumID']))->first_row('array');    
             if($checkCombinedSubject){
                 $combined[] = $c;
             }else{
