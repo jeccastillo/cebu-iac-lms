@@ -307,24 +307,17 @@
                               <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}</option>
                             </select>
                           </div>
+                          <div class="form-group">
+                            <label>Graduate Status</label>
+                            <select class="form-control" @change="updateGradStatus" v-model="grad_status" v-if="registrar_privilages">
+                              <option value="0">No</option>
+                              <option value="1">Yes</option>
+                            </select>
+                          </div>
                         </div>
                       </div>
 
-                    </div>
-                    <div>
-                      <strong>Graduated Status:</strong>
-                      <select v-model="grad_status"
-                        v-if="registrar_privilages"
-                        class="form-control"
-                        @change="updateGradStatus">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                      </select>
-                      <hr />
-                      <div>
-                        {{ student.isGraduate ? 'Grad' : 'Not Grad' }}
-                      </div>
-                    </div>
+                    </div>                    
                   </div>
                 </div>
               </div>
