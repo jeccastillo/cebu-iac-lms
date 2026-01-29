@@ -861,7 +861,8 @@ new Vue({
     loaDetails: {
       loa_remarks: '',
       loa_date: ''
-    }
+    },
+    documents = [],
   },
 
   mounted() {
@@ -899,6 +900,7 @@ new Vue({
                     this.term_balances = data.data.term_balances;
                     this.programs = data.data.programs;
                     this.electives = data.data.electives;
+                    this.documents = data.data.documents;
                     for (i in this.term_balances)
                       if (this.term_balances[i].balance > 0)
                         this.show_alert = true;
