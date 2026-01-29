@@ -170,6 +170,59 @@
                         <p><strong>Date Created:</strong> {{ student.dteCreated }}</p>
                         <p><strong>Admission Status:</strong> {{ applicant_data.tos }}</p>
                         <p><strong>Country of Citizenship:</strong> {{ applicant_data.citizenship }}</p>
+                        <table class="table table-bordered">
+                          <tr>
+                            <th>Mother:</th>
+                            <td>{{ student.mother }}</td>
+                            <td>{{ student.mother_contact }}</td>
+                            <td>{{ student.mother_email }}</td>
+                          </tr>
+                          <tr>
+                            <th>Father:</th>
+                            <td>{{ student.father }}</td>
+                            <td>{{ student.father_contact }}</td>
+                            <td>{{ student.father_email }}</td>
+                          </tr>
+                          <tr>
+                            <th>Guardian:</th>
+                            <td>{{ student.guardian }}</td>
+                            <td>{{ student.guardian_contact }}</td>
+                            <td>{{ student.guardian_email }}</td>
+                          </tr>
+                        </table>
+                        <table class="table table-bordered">
+                          <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Date(s) Attended</th>
+                          </tr>
+                          <tr>
+                            <th>High School:</th>
+                            <td>{{ student.high_school }}</td>
+                            <td>{{ student.high_school_address }}</td>
+                            <td>{{ student.high_school_attended }}</td>
+                          </tr>
+                          <tr>
+                            <th>SHS:</th>
+                            <td>{{ student.senior_high }}</td>
+                            <td>{{ student.senior_high_address }}</td>
+                            <td>{{ student.senior_high_attended }}</td>
+                          </tr>
+                          <tr>
+                            <th>College:</th>
+                            <td>{{ student.college }}</td>
+                            <td>{{ student.college_address }}</td>
+                            <td>{{ student.college_attended_from }}</td>
+                          </tr>
+                          <tr>
+                            <th></th>
+                            <td></td>
+                            </td>
+                            <td></td>
+                            <td>{{ student.college_attended_to }}</td>
+                          </tr>
+                        </table>
                       </div>
                       <div class="col-lg-4">
                         <div v-if="registration">
@@ -255,63 +308,6 @@
                             </select>
                           </div>
                         </div>
-                      </div>
-                      <div class="col-lg-6">
-                        <table class="table table-bordered">
-                          <tr>
-                            <th>Mother:</th>
-                            <td>{{ student.mother }}</td>
-                            <td>{{ student.mother_contact }}</td>
-                            <td>{{ student.mother_email }}</td>
-                          </tr>
-                          <tr>
-                            <th>Father:</th>
-                            <td>{{ student.father }}</td>
-                            <td>{{ student.father_contact }}</td>
-                            <td>{{ student.father_email }}</td>
-                          </tr>
-                          <tr>
-                            <th>Guardian:</th>
-                            <td>{{ student.guardian }}</td>
-                            <td>{{ student.guardian_contact }}</td>
-                            <td>{{ student.guardian_email }}</td>
-                          </tr>
-                        </table>
-                        <table class="table table-bordered">
-                          <tr>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Address</th>
-                            <th>Date(s) Attended</th>
-                          </tr>
-                          <tr>
-                            <th>High School:</th>
-                            <td>{{ student.high_school }}</td>
-                            <td>{{ student.high_school_address }}</td>
-                            <td>{{ student.high_school_attended }}</td>
-                          </tr>
-                          <tr>
-                            <th>SHS:</th>
-                            <td>{{ student.senior_high }}</td>
-                            <td>{{ student.senior_high_address }}</td>
-                            <td>{{ student.senior_high_attended }}</td>
-                          </tr>
-                          <tr>
-                            <th>College:</th>
-                            <td>{{ student.college }}</td>
-                            <td>{{ student.college_address }}</td>
-                            <td>{{ student.college_attended_from }}</td>
-                          </tr>
-                          <tr>
-                            <th></th>
-                            <td></td>
-                            </td>
-                            <td></td>
-                            <td>{{ student.college_attended_to }}</td>
-                          </tr>
-                        </table>
-
-                        <hr />
                       </div>
 
                     </div>
