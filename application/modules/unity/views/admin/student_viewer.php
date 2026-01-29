@@ -73,7 +73,7 @@
             <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="widget-user-header bg-red">
               <!-- /.widget-user-image -->
-              <div class="widget-user-image" style="float:left;margin-top:-78px;">
+              <div class="user-image" style="float:left;margin-top:-78px;">
                <img :src="picture"
                   alt="User Avatar" />              
               </div>
@@ -697,7 +697,7 @@
 }
 
   /* Avatar: keep image inside a perfect circle and crop with cover */
-  .widget-user-image {
+  .user-image {
     width: 150px;
     height: 150px;
     overflow: hidden;
@@ -707,7 +707,7 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.12);
   }
 
-  .widget-user-image img {
+  .user-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
