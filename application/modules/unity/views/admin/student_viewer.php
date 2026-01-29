@@ -1,8 +1,19 @@
 <aside class="right-side">
   <div id="student-viewer-container">
     <section class="content-header">
-      <h1>
-        <small>
+      <h1>        
+        <div class="box-tools pull-right">
+          <select v-model="sem_student"
+            @change="changeTermSelected"
+            id="term-select"
+            class="form-control">
+            <option v-for="s in sy"
+              :value="s.intID">
+              {{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}
+            </option>
+          </select>
+          <hr />
+          <small>
           <ul class="toolbar-tabs">
             <li><a class="toolbar-link" :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i><span>All</span></a></li>
             <li><a class="toolbar-link" target="_blank" :href="base_url + 'admissionsV1/view_lead_new/' + student.slug"><i class="fa fa-list"></i><span>Applicant Data</span></a></li>
@@ -22,17 +33,6 @@
             <li v-if="(user_level == 2 || user_level == 3) && registration"><a class="toolbar-link" href="#" @click.prevent="sendEnlistedNotification"><i class="fa fa-book"></i><span>Send Enlistment Notification</span></a></li>
           </ul>
         </small>
-
-        <div class="box-tools pull-right">
-          <select v-model="sem_student"
-            @change="changeTermSelected"
-            id="term-select"
-            class="form-control">
-            <option v-for="s in sy"
-              :value="s.intID">
-              {{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}
-            </option>
-          </select>
         </div>
         <div style="clear:both"></div>
       </h1>
