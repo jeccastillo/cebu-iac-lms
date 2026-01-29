@@ -123,10 +123,14 @@ input[type=text] {
                             src="
                         <?php echo $img_dir; ?>receipt-logo.jpg" alt="">
                         <h1>iACADEMY, INC.</h1>
-                        <p><small style="font-size: 10px">5th Floor Filinvest Cebu Cyberzone Tower
+                        <p><small style="font-size: 10px">iACADEMY Nexus Bldg. 7434 Yakal St., San
+                                Antonio 1203 City of Makati </small></p>
+                        <p><small style="font-size: 10px">NCR, Fourth District Philippines VAT REG
+                                TIN: 214-749-003-00000</small></p>
+                        <!-- <p><small style="font-size: 10px">5th Floor Filinvest Cebu Cyberzone Tower
                                 Two, Salinas Drive cor. W Geonzon St., Cebu IT Park,</small></p>
                         <p><small style="font-size: 10px">Apas 6000 City of Cebu, Cebu Philippines
-                                VAT REG TIN: 214-749-003-00003</small></p>
+                                VAT REG TIN: 214-749-003-00003</small></p> -->
                     </div>
                     <div style="justify-self:right;align-content: center;">
                         <p class="times-new" style="font-weight: 600;">OFFICIAL RECEIPT</p>
