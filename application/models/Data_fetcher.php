@@ -4351,8 +4351,8 @@ class Data_fetcher extends CI_Model {
         // print(gettype($cl) . ' @ ');
         // print_r($classlist);
         // print(' @@@@@@@@@@@@@@@@@@@@ ');
-        // print_r($cl);
-        // die();
+        print_r($cl);
+        die();
         
         
         foreach($cl as $c){
