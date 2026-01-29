@@ -120,3 +120,88 @@ input.app {
 .main-title {
   text-align: center;
 }
+
+/* Modern UI overrides: fonts and form controls */
+body, .content, .main-title {
+  font-family: "Poppins", sans-serif;
+  color: #2b2f33;
+}
+
+/* Card / box subtle elevation */
+.box, .panel, .nav-tabs-custom {
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(22,28,36,0.06);
+  border: 1px solid #e8eef2;
+}
+
+/* Form controls: rounded, subtle borders */
+.form-control {
+  border: 1px solid #e3edf2;
+  border-radius: 6px;
+  padding: 8px 12px;
+  height: 40px;
+  box-shadow: inset 0 1px 2px rgba(16,24,32,0.03);
+  background: #ffffff;
+  font-size: 14px;
+  color: #2b2f33;
+}
+
+.form-control:focus {
+  border-color: #4f9cff;
+  box-shadow: 0 0 0 4px rgba(79,156,255,0.08);
+  outline: none;
+}
+
+select.form-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #8fb7ff 50%), linear-gradient(135deg, #8fb7ff 50%, transparent 50%), linear-gradient(to right, #f7fafc, #f7fafc);
+  background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px), 100% 0;
+  background-size: 6px 6px, 6px 6px, 2.5em 2.5em;
+  background-repeat: no-repeat;
+}
+
+/* Smaller inputs (datetime) */
+input[type="datetime-local"].form-control,
+input[type="date"].form-control {
+  height: auto;
+  padding: 8px 10px;
+}
+
+.form-group > label {
+  font-weight: 600;
+  color: #222b2f;
+  margin-bottom: 6px;
+}
+
+/* Buttons: softer, rounded */
+.btn {
+  border-radius: 6px;
+}
+.btn-primary {
+  background-color: #1e88ff;
+  border-color: #196fe6;
+  box-shadow: none;
+}
+
+/* Tables: light header and clearer rows */
+table.table thead th {
+  background: #f8fafc;
+  color: #3a3f44;
+  font-weight: 700;
+  border-bottom: 1px solid #e6edf2;
+}
+
+/* Placeholder styling */
+::placeholder {
+  color: #98a3ad;
+  opacity: 1;
+}
+
+/* Make image avatar area tight */
+.size-96 img {
+  border-radius: 6px;
+  border: 1px solid #e6edf2;
+}
+
