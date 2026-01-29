@@ -890,6 +890,7 @@ class Unity extends CI_Controller {
             $ret['student'] = $this->data_fetcher->getStudent($id);
             $ret['subjects_available'] = $this->data_fetcher->getOfferedSubjects($ret['student']['intID'],$ret['student']['intCurriculumID'],$sem);           
             $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3)) )?true:false;
+            $ret['advanced_privilages2'] = (in_array($this->data["user"]['intUserLevel'],array(2,3,4,6)) )?true:false;
             //--------TUITION-------------------------------------------------------------------
             
             

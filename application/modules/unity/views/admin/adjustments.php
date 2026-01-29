@@ -313,6 +313,7 @@ new Vue({
         subject_to_label: 'Subject To',
         loader_spinner: true,      
         advanced_privilages: false,
+        advanced_privelages2: false,
         subject_to_add: undefined,
         additional_elective: 0,
         subjects_loaded: [],
@@ -342,7 +343,8 @@ new Vue({
                         this.subjects_loaded.push(this.records[i].strCode);
                     }               
                     this.slug = this.student.slug;
-                    this.advanced_privilages = data.data.advanced_privilages;           
+                    this.advanced_privilages = data.data.advanced_privilages;   
+                    this.advanced_privilages2 = data.data.advanced_privilages2;       
                 })
                 .catch((error) => {
                     console.log(error);
