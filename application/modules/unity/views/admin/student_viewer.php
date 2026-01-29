@@ -157,7 +157,7 @@
                   </div>
                   <div class="box-body">
                     <div class="row">
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <div class="info-row">
                           <small>Student Number</small>
                           <div class="info-value">{{ student.strStudentNumber.replace(/-/g, '') }}</div>
@@ -173,7 +173,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <div class="info-row">
                           <small>Year Level</small>
                           <div class="info-value">{{ registration && registration.intYearLevel ? registration.intYearLevel : '-' }}</div>
