@@ -23,10 +23,10 @@
         <hr />
     <div class="content">        
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-6">
                 <div v-if="student" class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
-                    <div class="widget-user-header bg-red">
+                    <div class="widget-user-header bg-blue">
                         <!-- /.widget-user-image -->
                         <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
                         <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
