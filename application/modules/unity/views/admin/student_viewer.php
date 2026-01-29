@@ -209,6 +209,7 @@
                             <td>{{ student.guardian_email }}</td>
                           </tr>
                         </table>
+                      </div>                      
                       </div>
                       <div class="col-md-6">
                         <h5 style="margin-top:0;margin-bottom:8px">Education</h5>
@@ -325,7 +326,6 @@
                             </select>
                           </div>
                         </div>
-                      </div>
                       </div>
                     </div>
                   </div>
