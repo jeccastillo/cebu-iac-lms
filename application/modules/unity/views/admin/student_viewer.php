@@ -698,8 +698,8 @@
 
   /* Avatar: keep image inside a perfect circle and crop with cover */
   .widget-user-image {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
     overflow: hidden;
     border-radius: 50%;
     display: inline-block;
