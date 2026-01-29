@@ -248,6 +248,10 @@
                         </div>
                         </div>
                         </div>
+                         </div>
+                  </div>
+                </div> 
+              </div>
                         <div :class="[(tab == 'tab_7') ? 'active' : '']"
                           class="tab-pane"
                           id="tab_7">
@@ -350,12 +354,7 @@
                             </select>
                           </div>                        
                       </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>                           
-                        
-                </div>             
+                  </div>                                                                                        
               </div>         
               <!-- /.tab-pane -->
               <div v-if="advanced_privilages1"
