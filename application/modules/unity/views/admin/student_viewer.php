@@ -233,8 +233,8 @@
                           </tr>
                         </table>
                         </div>
-                        <div class="col-lg-6">
                         <div v-if="registration">
+                        <div class="col-lg-6">                        
                           <div class="form-group">
                             <label>Block Section</label>
                             <select @change="updateBlock($event)" id="block_section" name="block_section" class="form-control" v-model="registration.block_section">
@@ -288,7 +288,7 @@
                               <option value="after">after</option>
                               <option value="end">end</option>
                             </select>
-                          </div>
+                          </div>                          
                           </div>
                           <div class="col-lg-6">
                           <div class="form-group">
