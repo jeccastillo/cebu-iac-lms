@@ -192,8 +192,8 @@
                       </div>
                     </div>
                   </div>
-                  </div>
-                  <div class="box box-default">
+                </div>
+                <div class="box box-default">
                   <div class="box-header with-border">
                     <h3 class="box-title"><i class="fa fa-user"></i> Other Information</h3>
                   </div>
@@ -244,24 +244,21 @@
                             <td>{{ student.college_attended_from }} - {{ student.college_attended_to }}</td>
                           </tr>
                         </table>
-                        </div>
-                        </div>
-                        </div>
-                        </div>
-                         </div>
+                      </div>
+                    </div>
                   </div>
-                </div> 
+                </div>
               </div>
-                        <div :class="[(tab == 'tab_7') ? 'active' : '']"
+              <div :class="[(tab == 'tab_7') ? 'active' : '']"
                           class="tab-pane"
                           id="tab_7">
-                        <div class="box box-default">
-                        <div class="box-header with-border">
-                          <h3 class="box-title"><i class="fa fa-settings"></i> Registrar Options</h3>
-                        </div>
-                        <div class="box-body">
-                          <div class="row">
-                        <div v-if="registration">
+                <div class="box box-default">
+                  <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-settings"></i> Registrar Options</h3>
+                  </div>
+                  <div class="box-body">
+                    <div class="row">
+                      <div v-if="registration">
                         <div class="col-lg-6">                        
                           <div class="form-group">
                             <label>Block Section</label>
@@ -353,9 +350,12 @@
                               <option value="1">Yes</option>
                             </select>
                           </div>                        
-                      </div>
-                  </div>                                                                                        
-              </div>         
+                        </div>
+                      </div>                                                                                        
+                    </div>    
+                  </div>
+                </div>
+              </div>     
               <!-- /.tab-pane -->
               <div v-if="advanced_privilages1"
                 :class="[(tab == 'tab_2') ? 'active' : '']"
