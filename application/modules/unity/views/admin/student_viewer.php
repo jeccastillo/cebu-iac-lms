@@ -73,7 +73,7 @@
             <img :src="picture"
               alt="User Avatar"
               class="img-circle"
-              style="width:150px;height:150px;border:3px solid #666;" />
+              style="width:150px;height:150px;border:0;" />
           </div>
         </div>
         <div class="col-sm-6">
