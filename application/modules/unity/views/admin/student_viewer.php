@@ -65,7 +65,7 @@
         </div>
       </div>
       <div class="row">        
-        <div class="col-sm-12">
+        <div class="col-sm-6">
           <div v-if="student"
             class="box box-widget widget-user-2">
             <!-- Add the bg color to the header using any of the bg-* classes -->
