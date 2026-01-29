@@ -732,23 +732,6 @@
     display: block !important;
   }
 </style>
-<style>
-.toolbar-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
-.toolbar-tabs li{display:inline-flex}
-.toolbar-link{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fff;border:1px solid #e1e6ea;border-radius:6px;color:#333;text-decoration:none;font-size:13px}
-.toolbar-link i{font-size:16px;color:#2c3e50}
-.toolbar-link span{white-space:nowrap}
-.toolbar-link:hover{background:#f5f7f9;border-color:#d0d7de}
-.toolbar-right{margin-left:auto}
-.toolbar-select{min-width:260px}
-
-/* Personal info compact rows */
-.info-row{margin-bottom:18px}
-.info-row small{display:block;color:#6c7378;margin-bottom:6px}
-.info-value{font-weight:700;color:#222b2f}
-.info-value .muted{font-weight:400;color:#6c7378;font-size:13px;margin-top:6px}
-
-</style>
 <!-- Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
