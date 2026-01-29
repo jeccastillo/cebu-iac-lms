@@ -232,7 +232,7 @@
                             <td>{{ student.college_attended_from }} - {{ student.college_attended_to }}</td>
                           </tr>
                         </table>
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                         <div v-if="registration">
                           <div class="form-group">
                             <label>Block Section</label>
@@ -279,7 +279,7 @@
                               <option value=4>LOA</option>
                               <option value=5>AWOL</option>
                             </select>
-                          </div>
+                          </div>                        
                           <div v-if="user_level == 2" class="form-group">
                             <label>Withdrawal Period</label>
                             <select class="form-control" @change="updateWithdrawalPeriod($event)" v-model="registration.withdrawal_period">
@@ -288,6 +288,8 @@
                               <option value="end">end</option>
                             </select>
                           </div>
+                          </div>
+                          <div class="col-lg-6">
                           <div class="form-group">
                             <label>Internship</label>
                             <select class="form-control" @change="updateInternshipStatus($event)" v-model="registration.internship">
