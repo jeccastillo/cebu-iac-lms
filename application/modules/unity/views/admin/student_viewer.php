@@ -142,7 +142,7 @@
                   data-toggle="tab">Schedule</a></li>
               <li v-if="registration && advanced_privilages2"
                   :class="[(tab == 'tab_6') ? 'active' : '']"><a href="#tab_6"
-                      data-toggle="tab">Document Submitted</a></li>              
+                      data-toggle="tab">Documents Submitted</a></li>              
               <li v-if="advanced_privilages2"><a
                   :href="base_url + 'unity/adjustments/' + student.intID + '/' + selected_ay">Adjustments</a>
               </li>

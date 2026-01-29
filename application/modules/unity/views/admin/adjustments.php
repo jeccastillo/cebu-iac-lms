@@ -57,7 +57,11 @@
                                 Personal Information
                             </a>
                         </li>
-                        
+                        <li v-if="advanced_privilages2">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_7'">
+                                Registrar Options
+                            </a>
+                        </li>
                         <li v-if="advanced_privilages">
                             <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">                            
                                 Subjects
@@ -72,6 +76,11 @@
                         <li v-if="advanced_privilages">
                             <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">                            
                                 Schedule
+                            </a>
+                        </li>
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_6'">                            
+                                Documents Submitted
                             </a>
                         </li>
                         <li class="active" v-if="advanced_privilages">
