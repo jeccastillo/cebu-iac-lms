@@ -73,12 +73,12 @@
             <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="widget-user-header bg-red">
               <!-- /.widget-user-image -->
-              <h3 class="widget-user-username"
-                style="text-transform:capitalize;margin-left:0;font-size:1.3em;">                
-                <img :src="picture"
+               <img :src="picture"
                   alt="User Avatar"
                   class="img-circle"
-                  style="width:150px;height:150px;border:0;" />              
+                  style="width:150px;height:150px;border:0;float:left" />              
+              <h3 class="widget-user-username"
+                style="text-transform:capitalize;margin-left:0;font-size:1.3em;">                                
                 {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
                 {{ student.strMiddlename?student.strMiddlename.toUpperCase():'' }}
               </h3>
