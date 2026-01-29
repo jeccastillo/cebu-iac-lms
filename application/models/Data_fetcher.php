@@ -4347,6 +4347,8 @@ class Data_fetcher extends CI_Model {
         }
 
         $cl = array_merge($notCombined, $combined);
+        print(typeof($classlist) . ' @ ');
+        print(typeof($cl) . ' @ ');
         print_r($classlist);
         print(' @@@@@@@@@@@@@@@@@@@@ ');
         print_r($cl);
