@@ -114,12 +114,6 @@
                         v-else>N/A</span>
                   </a>
                 </li>                
-                <li v-if="registration"><a style="font-size:13px;"
-                    href="#">Scholarship <span class="pull-right">{{ scholarship.name }}</span></a>
-                </li>
-                <li v-if="registration"><a style="font-size:13px;"
-                    href="#">Discount <span class="pull-right">{{ discount.name }}</span></a></li>
-
               </ul>
             </div>
           </div>
