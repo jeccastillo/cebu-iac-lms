@@ -149,55 +149,45 @@
               <div :class="[(tab == 'tab_1') ? 'active' : '']"
                 class="tab-pane"
                 id="tab_1">
-                <div class="box box-primary">
+                <div class="box box-default">
+                  <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-user"></i> Student Information</h3>
+                  </div>
                   <div class="box-body">
                     <div class="row">
-                      <div class="col-lg-3 size-96">
-                        <img v-if="!picture"
-                          :src="img_dir + 'default_image2.png'"
-                          class="img-responsive" />
-                        <img v-else
-                          class="img-responsive"
-                          :src="picture" />
+                      <div class="col-md-8">
+                        <div class="info-row">
+                          <small>Student Number</small>
+                          <div class="info-value">{{ student.strStudentNumber.replace(/-/g, '') }}</div>
+                        </div>
+                        <div class="info-row">
+                          <small>Full Name</small>
+                          <div class="info-value">{{ student.strLastname }}, {{ student.strFirstname }}{{ student.strMiddlename? ', ' + student.strMiddlename : '' }}</div>
+                        </div>
+                        <div class="info-row">
+                          <small>Program</small>
+                          <div class="info-value">{{ student.strProgramCode ? student.strProgramCode : '' }}
+                            <div class="muted">{{ student.strProgramDescription }}</div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="col-lg-5">
-                        <p><strong>Student Number:</strong> {{ student.strStudentNumber.replace(/-/g, '') }}</p>
-                        <p><strong>Gender:</strong> {{ student.enumGender }}</p>
-                        <p><strong>Address:</strong> {{ student.strAddress }}</p>
-                        <p><strong>Contact:</strong> {{ student.strMobileNumber }}</p>
-                        <p><strong>Personal Email:</strong> {{ student.strEmail }}</p>
-                        <p><strong>Birthdate:</strong> {{ student.dteBirthDate }}</p>
-                        <p><strong>Date Created:</strong> {{ student.dteCreated }}</p>
-                        <p><strong>Admission Status:</strong> {{ applicant_data.tos }}</p>
-                        <p><strong>Country of Citizenship:</strong> {{ applicant_data.citizenship }}</p>
-                        <table class="table table-bordered">
-                          <tr>
-                            <th>Mother:</th>
-                            <td>{{ student.mother }}</td>
-                            <td>{{ student.mother_contact }}</td>
-                            <td>{{ student.mother_email }}</td>
-                          </tr>
-                          <tr>
-                            <th>Father:</th>
-                            <td>{{ student.father }}</td>
-                            <td>{{ student.father_contact }}</td>
-                            <td>{{ student.father_email }}</td>
-                          </tr>
-                          <tr>
-                            <th>Guardian:</th>
-                            <td>{{ student.guardian }}</td>
-                            <td>{{ student.guardian_contact }}</td>
-                            <td>{{ student.guardian_email }}</td>
-                          </tr>
-                        </table>
-                        <table class="table table-bordered">
-                          <tr>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Address</th>
-                            <th>Date(s) Attended</th>
-                          </tr>
-                          <tr>
+                      <div class="col-md-4">
+                        <div class="info-row">
+                          <small>Year Level</small>
+                          <div class="info-value">{{ registration && registration.intYearLevel ? registration.intYearLevel : '-' }}</div>
+                        </div>
+                        <div class="info-row">
+                          <small>Status</small>
+                          <div class="info-value">{{ reg_status ? reg_status : '-' }}</div>
+                        </div>
+                        <div class="info-row">
+                          <small>Student Type</small>
+                          <div class="info-value">{{ registration && registration.enumStudentType ? registration.enumStudentType : '-' }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                             <th>High School:</th>
                             <td>{{ student.high_school }}</td>
                             <td>{{ student.high_school_address }}</td>
@@ -685,6 +675,13 @@
 .toolbar-link:hover{background:#f5f7f9;border-color:#d0d7de}
 .toolbar-right{margin-left:auto}
 .toolbar-select{min-width:260px}
+
+/* Personal info compact rows */
+.info-row{margin-bottom:18px}
+.info-row small{display:block;color:#6c7378;margin-bottom:6px}
+.info-value{font-weight:700;color:#222b2f}
+.info-value .muted{font-weight:400;color:#6c7378;font-size:13px;margin-top:6px}
+
 </style>
 <!-- Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
