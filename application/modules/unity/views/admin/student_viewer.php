@@ -182,6 +182,14 @@
                         </div>
                       </div>
                     </div>
+                  </div>
+                  </div>
+                  <div class="box box-default">
+                  <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-user"></i> Other Information</h3>
+                  </div>
+                  <div class="box-body">
+                    <div class="row">
                     <div class="row" style="margin-top:12px">
                       <div class="col-md-6">
                         <h5 style="margin-top:0;margin-bottom:8px">Parents / Guardian</h5>
