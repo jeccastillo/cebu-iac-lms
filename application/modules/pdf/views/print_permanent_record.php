@@ -526,10 +526,11 @@ foreach ($records  as $block):
                         </tr>
                     </thead>
                     <tbody> <?php foreach ($subjects as $subject): ?> <tr>
-                            <td><?php echo $subject['strCode']; ?></td>
-                            <td><?php echo $subject['strDescription']; ?></td>
-                            <td><?php echo $subject['semFinalGrade']; ?></td>
-                            <td><?php echo strtoupper($subject['strRemarks']); ?></td>
+                            <td class="code-col"><?php echo $subject['strCode']; ?></td>
+                            <td class="subject-col"><?php echo $subject['strDescription']; ?></td>
+                            <td class="grade-col"><?php echo $subject['semFinalGrade']; ?></td>
+                            <td class="remarks-col">
+                                <?php echo strtoupper($subject['strRemarks']); ?></td>
                         </tr> <?php endforeach; ?> </tbody>
                 </table>
                 <div class="footer-table">
