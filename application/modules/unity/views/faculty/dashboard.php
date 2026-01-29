@@ -1,4 +1,4 @@
- <div class="content-wrapper">
+ <div class="content-wrapper" style="padding: 24px 12px 12px 12px; background: #fafbfc; min-height: 100vh;">
      <section class="content-header">
          <h1>
              Dashboard
@@ -44,22 +44,6 @@
                              class="info-box-number"><?php echo $app_sem['enumSem']." ".$term_type." ".$app_sem['strYearStart']."-".$app_sem['strYearEnd']; ?></span>
 
 
-                     </div>
-                     <!-- /.info-box-content -->
-                 </div>
-                 <!-- /.info-box -->
-             </div>
-             <div class="col-md-4 col-sm-8 col-xs-12">
-                 <div class="info-box bg-blue">
-                     <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
-
-                     <div class="info-box-content">
-                         <span class="info-box-text">ROOM RESERVATION</span>                         
-                         <span class="info-box-number">
-                             <a href="<?php echo base_url(); ?>reservation" class="text-white">
-                                 <i class="fa fa-plus"></i> Reserve Room
-                             </a>
-                         </span>
                      </div>
                      <!-- /.info-box-content -->
                  </div>
