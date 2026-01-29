@@ -8381,15 +8381,11 @@ class Excel extends CI_Controller {
 
         if ( !$this->upload->do_upload("student_grade_excel"))
         {
-            print('3');
-            die();
             $error = array('error' => $this->upload->display_errors());
             return $error;
         }
         else
         {
-            print('4');
-            die();
             $fileData = $this->upload->data();
             $filePath = './assets/excel/' . $fileData['file_name'];
 
