@@ -73,10 +73,9 @@
             <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="widget-user-header bg-red">
               <!-- /.widget-user-image -->
-              <div class="widget-user-image">
+              <div class="widget-user-image" style="float:left;margin-top:-78px;">
                <img :src="picture"
-                  alt="User Avatar"                  
-                  style="float:left;margin-top:-78px;" />              
+                  alt="User Avatar" />              
               </div>
               <h3 class="widget-user-username"
                 style="text-transform:capitalize;margin-left:5px;font-size:1.3em;">                                
