@@ -66,24 +66,19 @@
           </table>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-6">
-          <div v-if="student"
-            class="text-center">
-            <img :src="picture"
-              alt="User Avatar"
-              class="img-circle"
-              style="width:150px;height:150px;border:0;" />
-          </div>
-        </div>
-        <div class="col-sm-6">
+      <div class="row">        
+        <div class="col-sm-12">
           <div v-if="student"
             class="box box-widget widget-user-2">
             <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="widget-user-header bg-red">
               <!-- /.widget-user-image -->
               <h3 class="widget-user-username"
-                style="text-transform:capitalize;margin-left:0;font-size:1.3em;">
+                style="text-transform:capitalize;margin-left:0;font-size:1.3em;">                
+                <img :src="picture"
+                  alt="User Avatar"
+                  class="img-circle"
+                  style="width:150px;height:150px;border:0;" />              
                 {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
                 {{ student.strMiddlename?student.strMiddlename.toUpperCase():'' }}
               </h3>
