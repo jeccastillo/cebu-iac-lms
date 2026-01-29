@@ -73,7 +73,7 @@
             <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="widget-user-header bg-red">
               <!-- /.widget-user-image -->
-               <img :src="picture"
+               <img :src="picture" class="widget-user-image"
                   alt="User Avatar"
                   class="img-circle"
                   style="width:150px;height:150px;border:0;float:left;margin-top:-78px;" />              
