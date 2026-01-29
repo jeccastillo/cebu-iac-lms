@@ -236,6 +236,8 @@
                     </div>
                   </div>
                 </div>                           
+                        </table>
+                      </div>
                       <div class="col-lg-4">
                         <div v-if="registration">
                           <div class="form-group">
