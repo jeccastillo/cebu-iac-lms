@@ -1659,6 +1659,50 @@ new Vue({
 
       })
     },
+    submitDocument(e) {
+            var formData = new FormData();
+            for (const [key, value] of Object.entries(this.documentDetails)) {
+                formData.append(key, value);
+            }
+            axios.post(base_url + 'unity/add_student_document', formData, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            }).then(data => {
+                this.loader_spinner = false;
+                axios.get(this.base_url + 'unity/student_viewer_data/' + this.id +
+                    '/' + this.sem).then((data) => {
+                    this.documents = data.data.documents
+                    this.documentDetails.document = ''
+                    this.documentDetails.remarks = ''
+                })
+                Swal.fire({
+                    title: "Success",
+                    text: data.data.message,
+                    icon: "success"
+                })
+            })
+        },
+        removeDocument(id) {
+            var formData = new FormData();
+            formData.append('id', id);
+            axios.post(base_url + 'unity/delete_student_document', formData, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            }).then(data => {
+                this.loader_spinner = false;
+                axios.get(this.base_url + 'unity/student_viewer_data/' + this.id +
+                    '/' + this.sem).then((data) => {
+                    this.documents = data.data.documents
+                })
+                Swal.fire({
+                    title: "Success",
+                    text: data.data.message,
+                    icon: "success"
+                })
+            })
+        },
 
   },
 
