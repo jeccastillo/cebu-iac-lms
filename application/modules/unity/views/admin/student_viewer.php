@@ -107,7 +107,7 @@
                     href="#"><i class="ion ion-android-close"></i> Reset Status</a> </li>
                 <li>
                   <a style="font-size:13px;"
-                    href="#">Date Registered <span class="pull-right">
+                    href="#">Date Enlisted <span class="pull-right">
                       <span style="color:#009000"
                         v-if="registration">{{ registration.date_enlisted }}</span>
                       <span style="color:#900000;"
