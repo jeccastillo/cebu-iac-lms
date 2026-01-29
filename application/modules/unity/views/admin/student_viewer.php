@@ -91,6 +91,7 @@
                 <li v-if="(user_level == 2 || user_level == 3) && registration"><a class="toolbar-link" href="#" @click.prevent="sendEnlistedNotification"><i class="fa fa-book"></i><span>Send Enlistment Notification</span></a></li>
               </ul>
           </small>
+          <hr />
           <div class="row"
               v-if="show_alert">
               <div class="alert alert-danger col-sm-6"
