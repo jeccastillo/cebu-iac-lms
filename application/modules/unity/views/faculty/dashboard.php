@@ -49,6 +49,22 @@
                  </div>
                  <!-- /.info-box -->
              </div>
+             <div class="col-md-4 col-sm-8 col-xs-12">
+                 <div class="info-box bg-blue">
+                     <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
+
+                     <div class="info-box-content">
+                         <span class="info-box-text">ROOM RESERVATION</span>                         
+                         <span class="info-box-number">
+                             <a href="<?php echo base_url(); ?>reservation" class="text-white">
+                                 <i class="fa fa-plus"></i> Reserve Room
+                             </a>
+                         </span>
+                     </div>
+                     <!-- /.info-box-content -->
+                 </div>
+                 <!-- /.info-box -->
+             </div>
              <div class="col-md-4 col-sm-8 col-xs-12" style="display:none">
                  <!-- small box -->
                  <div class="small-box bg-yellow">
