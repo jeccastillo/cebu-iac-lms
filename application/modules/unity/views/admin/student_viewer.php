@@ -608,6 +608,9 @@
                   </div>
                 </div>
               </div>
+              <div v-if="registration" :class="[(tab == 'tab_6') ? 'active' : '']"
+              class="tab-pane" id="tab_6">
+              <?php $this->load->view('admin/documents_submitted'); ?> </div>
             </div>
             <!-- /.tab-content -->
           </div>
