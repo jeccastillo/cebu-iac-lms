@@ -232,13 +232,7 @@
                             <td>{{ student.college_attended_from }} - {{ student.college_attended_to }}</td>
                           </tr>
                         </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>                           
-                        </table>
-                      </div>
-                      <div class="col-lg-4">
+                        <div class="col-lg-4">
                         <div v-if="registration">
                           <div class="form-group">
                             <label>Block Section</label>
@@ -330,11 +324,12 @@
                           </div>
                         </div>
                       </div>
-
-                    </div>                    
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </div>                           
+                        
+                </div>                      
               <!-- /.tab-pane -->
               <div v-if="advanced_privilages1"
                 :class="[(tab == 'tab_2') ? 'active' : '']"
