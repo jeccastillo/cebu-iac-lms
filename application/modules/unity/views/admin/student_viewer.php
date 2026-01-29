@@ -186,6 +186,54 @@
                         </div>
                       </div>
                     </div>
+                    <div class="row" style="margin-top:12px">
+                      <div class="col-md-6">
+                        <h5 style="margin-top:0;margin-bottom:8px">Parents / Guardian</h5>
+                        <table class="table table-borderless" style="margin-bottom:0">
+                          <tr>
+                            <th style="width:90px">Mother:</th>
+                            <td>{{ student.mother }}</td>
+                            <td>{{ student.mother_contact }}</td>
+                            <td>{{ student.mother_email }}</td>
+                          </tr>
+                          <tr>
+                            <th>Father:</th>
+                            <td>{{ student.father }}</td>
+                            <td>{{ student.father_contact }}</td>
+                            <td>{{ student.father_email }}</td>
+                          </tr>
+                          <tr>
+                            <th>Guardian:</th>
+                            <td>{{ student.guardian }}</td>
+                            <td>{{ student.guardian_contact }}</td>
+                            <td>{{ student.guardian_email }}</td>
+                          </tr>
+                        </table>
+                      </div>
+                      <div class="col-md-6">
+                        <h5 style="margin-top:0;margin-bottom:8px">Education</h5>
+                        <table class="table table-borderless" style="margin-bottom:0">
+                          <tr>
+                            <th style="width:120px">High School:</th>
+                            <td>{{ student.high_school }}</td>
+                            <td>{{ student.high_school_address }}</td>
+                            <td>{{ student.high_school_attended }}</td>
+                          </tr>
+                          <tr>
+                            <th>SHS:</th>
+                            <td>{{ student.senior_high }}</td>
+                            <td>{{ student.senior_high_address }}</td>
+                            <td>{{ student.senior_high_attended }}</td>
+                          </tr>
+                          <tr>
+                            <th>College:</th>
+                            <td>{{ student.college }}</td>
+                            <td>{{ student.college_address }}</td>
+                            <td>{{ student.college_attended_from }} - {{ student.college_attended_to }}</td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
                   </div>
                 </div>
                             <th>High School:</th>
