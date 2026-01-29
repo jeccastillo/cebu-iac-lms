@@ -1020,6 +1020,19 @@ new Vue({
                       load_schedule(sched);
                     }, 1000);
 
+                    // Initialize Select2 on the term dropdown
+                    const self = this;
+                    setTimeout(function() {
+                      $('#term-select').select2({
+                        placeholder: 'Select a term',
+                        allowClear: false,
+                        width: '300px'
+                      }).on('change', function() {
+                        self.sem_student = $(this).val();
+                        self.changeTermSelected();
+                      });
+                    }, 500);
+
                   } else {
                     //document.location = this.base_url + 'users/login';
                   }
@@ -1668,20 +1681,6 @@ new Vue({
     },
 
   },
-  mounted: function() {
-    // Initialize Select2 on the term dropdown
-    const self = this;
-    setTimeout(function() {
-      $('#term-select').select2({
-        placeholder: 'Select a term',
-        allowClear: false,
-        width: '300px'
-      }).on('change', function() {
-        self.sem_student = $(this).val();
-        self.changeTermSelected();
-      });
-    }, 500);
-  }
 
 })
 </script>
