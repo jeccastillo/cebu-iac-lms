@@ -209,7 +209,6 @@
                             <td>{{ student.guardian_email }}</td>
                           </tr>
                         </table>
-                      </div>                      
                       </div>
                       <div class="col-md-6">
                         <h5 style="margin-top:0;margin-bottom:8px">Education</h5>
@@ -233,6 +232,7 @@
                             <td>{{ student.college_attended_from }} - {{ student.college_attended_to }}</td>
                           </tr>
                         </table>
+                        </div>
                         <div class="col-lg-6">
                         <div v-if="registration">
                           <div class="form-group">
@@ -324,8 +324,8 @@
                               <option value="0">No</option>
                               <option value="1">Yes</option>
                             </select>
-                          </div>
-                        </div>
+                          </div>                        
+                      </div>
                       </div>
                     </div>
                   </div>
