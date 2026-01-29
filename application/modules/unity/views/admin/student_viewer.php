@@ -868,7 +868,7 @@ new Vue({
       loa_remarks: '',
       loa_date: ''
     },
-    documents = [],
+    documents: []
   },
 
   mounted() {
