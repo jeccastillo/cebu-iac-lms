@@ -696,9 +696,27 @@
   background-color: #cc7777;
 }
 
-.select2-container {
-  display: block !important;
-}
+  /* Avatar: keep image inside a perfect circle and crop with cover */
+  .widget-user-image {
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  }
+
+  .widget-user-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .select2-container {
+    display: block !important;
+  }
 </style>
 <style>
 .toolbar-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
