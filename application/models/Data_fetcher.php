@@ -4323,7 +4323,7 @@ class Data_fetcher extends CI_Model {
 
         // print_r($cl);
 
-        $classlist =  $this->db
+        $cl =  $this->db
                     ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular,is_special_class,enlisted_user, tb_mas_subjects.intMajor, tb_mas_subjects.isElective, tb_mas_classlist_student.additional_elective, tb_mas_classlist.intCurriculumID")                                        
                     ->from("tb_mas_classlist_student")            
                     ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist,'isDissolved'=>0))                                            
@@ -4337,22 +4337,22 @@ class Data_fetcher extends CI_Model {
                     ->get()
                     ->result_array();
 
-        foreach($classlist as $c){
-            $checkCombinedSubject = $this->db->get_where('tb_mas_curriculum_second',array('intID'=>$c['intCurriculumID']))->first_row('array');    
-            if($checkCombinedSubject){
-                $combined[] = $c;
-            }else{
-                $notCombined[] = $c;
-            }
-        }
+        // foreach($classlist as $c){
+        //     $checkCombinedSubject = $this->db->get_where('tb_mas_curriculum_second',array('intID'=>$c['intCurriculumID']))->first_row('array');    
+        //     if($checkCombinedSubject){
+        //         $combined[] = $c;
+        //     }else{
+        //         $notCombined[] = $c;
+        //     }
+        // }
 
-        $cl = array_merge($notCombined, $combined);
-        print(typeof($classlist) . ' @ ');
-        print(typeof($cl) . ' @ ');
-        print_r($classlist);
-        print(' @@@@@@@@@@@@@@@@@@@@ ');
-        print_r($cl);
-        die();
+        // $cl = array_merge($notCombined, $combined);
+        // print(typeof($classlist) . ' @ ');
+        // print(typeof($cl) . ' @ ');
+        // print_r($classlist);
+        // print(' @@@@@@@@@@@@@@@@@@@@ ');
+        // print_r($cl);
+        // die();
         
         
         foreach($cl as $c){
