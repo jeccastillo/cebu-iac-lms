@@ -87,6 +87,7 @@
         <div class="box-tools pull-right">
           <select v-model="sem_student"
             @change="changeTermSelected"
+            id="term-select"
             class="form-control">
             <option v-for="s in sy"
               :value="s.intID">
@@ -755,9 +756,43 @@
   display: block !important;
 }
 </style>
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+.select2-container--default .select2-selection--single {
+  height: 34px;
+  border: 1px solid #d2d6de;
+  border-radius: 0;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 32px;
+  padding-left: 12px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 32px;
+}
+
+.select2-container {
+  width: 100% !important;
+}
+
+.select2-dropdown {
+  border: 1px solid #d2d6de;
+  border-radius: 0;
+}
+
+.select2-search--dropdown .select2-search__field {
+  border: 1px solid #d2d6de;
+  border-radius: 0;
+}
+</style>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
 <script type="text/javascript"
   src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 new Vue({
   el: '#student-viewer-container',
@@ -1629,6 +1664,20 @@ new Vue({
       })
     },
 
+  },
+  mounted: function() {
+    // Initialize Select2 on the term dropdown
+    const self = this;
+    setTimeout(function() {
+      $('#term-select').select2({
+        placeholder: 'Select a term',
+        allowClear: false,
+        width: '300px'
+      }).on('change', function() {
+        self.sem_student = $(this).val();
+        self.changeTermSelected();
+      });
+    }, 500);
   }
 
 })
