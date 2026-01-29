@@ -75,8 +75,8 @@
               <!-- /.widget-user-image -->
                <img :src="picture"
                   alt="User Avatar"
-                  class="img-circle widget-user-image"
-                  style="width:150px;height:150px;border:0;float:left;margin-top:-78px;" />              
+                  class="widget-user-image"
+                  style="float:left;margin-top:-78px;" />              
               <h3 class="widget-user-username"
                 style="text-transform:capitalize;margin-left:5px;font-size:1.3em;">                                
                 {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
