@@ -707,7 +707,7 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.12);
   }
 
-  .widget-user-image img {
+  img.widget-user-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
