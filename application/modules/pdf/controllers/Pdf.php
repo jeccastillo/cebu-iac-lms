@@ -2562,8 +2562,8 @@ class Pdf extends CI_Controller {
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
 
         if($this->data['campus'] == "Cebu"){
-            // $this->load->view("print_invoice_cebu",$this->data);
-             $this->load->view("print_invoice_new",$this->data); 
+            $this->load->view("print_invoice_cebu",$this->data);
+            //  $this->load->view("print_invoice_new",$this->data); 
         }else {
             $this->load->view("print_invoice",$this->data);
         }
@@ -2651,8 +2651,8 @@ class Pdf extends CI_Controller {
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         
         if ($this->data['campus'] == "Cebu") {
-            // $this->load->view("print_or_latest_cebu",$this->data);
-              $this->load->view("print_or_latest_cebu_new",$this->data);   
+            $this->load->view("print_or_latest_cebu",$this->data);
+              
         }else {
             // $this->load->view("print_or_latest_test",$this->data);
             $this->load->view("print_or_latest",$this->data);
